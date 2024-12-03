@@ -15,11 +15,9 @@ docker run --rm -ti callassoftware/pdftoolbox-cli ./pdfToolbox sample.kfpx sampl
 ```
 
 ## Dockerfile Example
-per default only debian linux based docker images are provided on our dockerhup repository
+per default our docker images on dockerhub are based on debian linux
 
 ```
-# note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
-
 FROM debian:latest AS debian-enriched
 RUN apt-get update -y && apt-get upgrade -y \
         && apt-get install -y  \
@@ -27,23 +25,18 @@ RUN apt-get update -y && apt-get upgrade -y \
                 lsb-release \
                 procps \
                 net-tools \
-                vim-tiny  \
-                perl-modules  \
-                wget  \
-                curl  \
-                jq
+                perl-modules \
+                fontconfig
 
-FROM debian-enriched AS debian-enriched-with-fonts
+FROM debian-enriched AS debian-enriched-with-fonts 
 RUN apt-get install -y \
-                fontconfig  \
                 libfreetype6 \
                 fonts-dejavu
 
 FROM debian-enriched-with-fonts AS pdftoolbox-installed
 COPY callas_pdfToolboxCLI_x64_Linux_15-1-639 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-1-639
-COPY Dockerfile.versioned /Dockerfile
 
-# RUN ln -s /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-1-639 /opt/callas/pdftoolbox-cli
+# add some "convenience" symlinks ...
 RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 cli
 
 # note: regarding the image size it doesn't really make a difference to clean or not
@@ -55,12 +48,4 @@ RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 pdftoolbox-c
 #      && rm -r -f /usr/share/man
 
 WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-1-639
-
-# finally the "complicated" stuff ...
-# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
-# short ...
-#   ENTRYPOINT specifies default parameters that cannot be overridden. it can be used for initial setup (e.g. install fonts)
-#   CMD specifies default parameters that can be overridden
-# ENTRYPOINT ["/bin/bash"]
-# CMD ["/bin/bash"]
 ```
