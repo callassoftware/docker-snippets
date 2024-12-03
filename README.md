@@ -15,7 +15,7 @@ docker run --rm -ti callassoftware/pdftoolbox-cli ./pdfToolbox sample.kfpx sampl
 ```
 
 ## Dockerfile Example
-per default only debian based docker images are provided on our dockerhup repository
+per default only debian linux based docker images are provided on our dockerhup repository
 
 ```
 # note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
