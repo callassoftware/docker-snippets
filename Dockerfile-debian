@@ -14,10 +14,10 @@ RUN apt-get install -y \
                 fonts-dejavu
 
 FROM debian-enriched-with-fonts AS pdftoolbox-installed
-COPY callas_pdfToolboxCLI_x64_Linux_15-1-639 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-1-639
+COPY callas_pdfToolboxCLI_x64_Linux_15-2-646 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 cli
 
 # note: regarding the image size it doesn't really make a difference to clean or not
 # FROM pdftoolbox-installed AS cleaned
@@ -27,4 +27,4 @@ RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-1-639 pdftoolbox-c
 #      && rm -r -f /usr/share/doc \
 #      && rm -r -f /usr/share/man
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-1-639
+WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
