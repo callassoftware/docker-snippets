@@ -9,8 +9,8 @@ note: images tagged with _essential_ have been reduced by following the instruct
 note: Starting with v15-1-639, these images have manifests that include not only AMD64/Intel64, but also ARM64
 ```
 docker pull callassoftware/pdftoolbox-cli
-docker pull callassoftware/pdftoolbox-cli:v15-1-639
-docker pull callassoftware/pdftoolbox-cli:v15-1-639-essential
+docker pull callassoftware/pdftoolbox-cli:v15-2-639
+docker pull callassoftware/pdftoolbox-cli:v15-2-639-essential
 ```
 run preflight using the sample.kfpx/sample.pdf contained in the image
 ```
