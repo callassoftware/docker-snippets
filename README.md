@@ -26,4 +26,10 @@ cd docker-snippets
 wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_15-2-646.tar.gz
 tar xvpf callas_pdfToolboxCLI_x64_Linux_15-2-646.tar.gz
 docker build -t callas/pdftoolbox:v15-2-646 -f Dockerfile-debian $(pwd)
+
+
+## ... try it out ...
+
+```
+docker run --rm -ti callas/pdftoolbox:v15-2-646 ./pdfToolbox --version
 ```
