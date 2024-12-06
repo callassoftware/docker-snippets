@@ -6,7 +6,7 @@ please see also our ready-to-use docker images on https://hub.docker.com/reposit
 
 note: images tagged with _essential_ have been reduced by following the instructions from https://help.callassoftware.com/m/pdftoolbox/l/793898-file-components-and-their-use-in-pdftoolbox-sdk⁠ (see also reduce-essential.sh)
 
-note: Starting with v15-1-639, these images have manifests that support not only AMD64/Intel64, but also ARM64 as well
+note: Starting with v15-1-639, these images also support ARM64 now (not only AMD64/Intel64)
 ```
 docker pull callassoftware/pdftoolbox-cli
 docker pull callassoftware/pdftoolbox-cli:v15-2-639
