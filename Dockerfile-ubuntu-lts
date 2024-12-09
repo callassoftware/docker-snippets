@@ -1,0 +1,24 @@
+FROM ubuntu:noble
+RUN apt-get update -y && apt-get upgrade -y \
+        && apt-get install -y  \
+                apt-utils  \
+                lsb-release \
+                procps \
+                net-tools \
+                libkeyutils1 \
+                fontconfig  \
+                fonts-dejavu
+
+# optional - install microsoft truetype fonts ...
+# RUN apt install -y ttf-mscorefonts-installer
+
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
+# RUN apt install -y --install-recommends libreoffice libreoffice-java-common
+
+COPY callas_pdfToolboxCLI_x64_Linux_15-2-646 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
+
+# add some "convenience" symlinks ...
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 cli
+
+WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
+
