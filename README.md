@@ -4,7 +4,7 @@ some docker related snippets and howtos for the pdfToolbox-cli
 ## ready to use docker images on Dockerhub
 please see also our ready-to-use docker images on https://hub.docker.com/repository/docker/callassoftware/pdftoolbox-cli
 
-note: Starting with pdfToolbox v15-1-639, these images also support ARM64 now (not only AMD64/Intel64)
+note: Starting with pdfToolbox v15-1-639, these images support not only AMD64/Intel64, but also ARM64 as well
 ```
 docker pull callassoftware/pdftoolbox-cli
 docker pull callassoftware/pdftoolbox-cli:v15-2-639
