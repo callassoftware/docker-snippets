@@ -29,7 +29,7 @@ tar xvpf callas_pdfToolboxCLI_x64_Linux_15-2-646.tar.gz
 ```
 
 ### optional: reduce resulting image size
-optionally you can also reduce the size of the resulting image by removing some pdfToolbox parts. In other words: you can also create "essential" images by yourself
+before building the image you can optionally reduce the size of the resulting image by removing some pdfToolbox parts that you don't need for you specific use case. In other words: you can also create "essential" images by yourself
 
 ```
 cd callas_pdfToolboxCLI_x64_Linux_15-2-646
