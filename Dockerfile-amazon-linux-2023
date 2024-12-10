@@ -23,6 +23,9 @@ COPY callas_pdfToolboxCLI_x64_Linux_15-2-646 /opt/callas/callas_pdfToolboxCLI_x6
 # add some "convenience" symlinks ...
 RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 cli
 
+# amazon linux 2023 does not have /usr/bin/lsb_release. use a mockup instead
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
 
