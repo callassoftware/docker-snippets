@@ -7,8 +7,8 @@ please see also our ready-to-use docker images on https://hub.docker.com/reposit
 note: Starting with pdfToolbox v15-1-639, these images support not only AMD64/Intel64, but also ARM64 as well
 ```
 docker pull callassoftware/pdftoolbox-cli
-docker pull callassoftware/pdftoolbox-cli:v15-2-639
-docker pull callassoftware/pdftoolbox-cli:v15-2-639-essential
+docker pull callassoftware/pdftoolbox-cli:15-2-646
+docker pull callassoftware/pdftoolbox-cli:15-2-646-essential
 ```
 run preflight using the sample.kfpx/sample.pdf contained in the image
 ```
