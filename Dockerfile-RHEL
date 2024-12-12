@@ -1,0 +1,29 @@
+FROM redhat/ubi9
+
+RUN yum update -y && \
+    yum install -y procps fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts
+
+
+# optional - install microsoft truetype fonts ...
+# RUN yum install cabextract && 
+#    yum install https://rpmfind.net/linux/almalinux/9.5/devel/x86_64/os/Packages/xorg-x11-font-utils-7.5-53.el9.x86_64.rpm && \
+#    yum install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
+# RUN yum install -y wget libXinerama cairo cups-libs libSM java
+# RUN cd /root && wget https://download.documentfoundation.org/libreoffice/stable/24.8.2/rpm/x86_64/LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
+#      tar xvpf LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
+#      cd LibreOffice_24.8.2.1_Linux_x86-64_rpm/RPMS && \
+#      rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice24.8/program/soffice
+
+# COPY callas_pdfToolboxCLI_x64_Linux_15-2-646 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
+
+# add some "convenience" symlinks ...
+# RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646 cli
+
+# almalinux does not have /usr/bin/lsb_release. use a mockup instead
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+
+WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646
+
