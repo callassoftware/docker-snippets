@@ -25,7 +25,8 @@ assumption: there is a linux image build machine with the needed tools already i
 git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
 wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_15-2-646-1.tar.gz
-tar xvpf callas_pdfToolboxCLI_x64_Linux_15-2-646-1.tar.gz
+tar zxvpf callas_pdfToolboxCLI_x64_Linux_15-2-646-1.tar.gz
+mv callas_pdfToolboxCLI15_x64_Linux_15-2-646-1 callas_pdfToolboxCLI_x64_Linux_15-2-646-1
 ```
 
 ### optional: reduce resulting image size
