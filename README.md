@@ -7,8 +7,8 @@ please see also our ready-to-use docker images on https://hub.docker.com/reposit
 note: Starting with pdfToolbox v15-1-639, these images support not only AMD64/Intel64, but also ARM64 as well
 ```
 docker pull callassoftware/pdftoolbox-cli
-docker pull callassoftware/pdftoolbox-cli:15-2-646
-docker pull callassoftware/pdftoolbox-cli:15-2-646-essential
+docker pull callassoftware/pdftoolbox-cli:15-2-646-1
+docker pull callassoftware/pdftoolbox-cli:15-2-646-1-essential
 ```
 run preflight using the sample.kfpx/sample.pdf contained in the image
 ```
@@ -24,27 +24,27 @@ assumption: there is a linux image build machine with the needed tools already i
 ```
 git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
-wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_15-2-646.tar.gz
-tar xvpf callas_pdfToolboxCLI_x64_Linux_15-2-646.tar.gz
+wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_15-2-646-1.tar.gz
+tar xvpf callas_pdfToolboxCLI_x64_Linux_15-2-646-1.tar.gz
 ```
 
 ### optional: reduce resulting image size
 before building the image you can optionally reduce the size of the resulting image by removing some pdfToolbox parts that you don't need for you specific use case. In other words: you can also create "essential" images by yourself
 
 ```
-cd callas_pdfToolboxCLI_x64_Linux_15-2-646
+cd callas_pdfToolboxCLI_x64_Linux_15-2-646-1
 bash ../reduce-essential.sh
 cd ..
 ```
 
 ### build the image
 ```
-docker build -t callas/pdftoolbox:v15-2-646 -f Dockerfile-debian $(pwd)
+docker build -t callas/pdftoolbox:v15-2-646-1 -f Dockerfile-debian $(pwd)
 ```
 
 
 ## ... try it out ...
 
 ```
-docker run --rm -ti callas/pdftoolbox:v15-2-646 ./pdfToolbox --version
+docker run --rm -ti callas/pdftoolbox:v15-2-646-1 ./pdfToolbox --version
 ```
