@@ -15,7 +15,6 @@ run preflight using the sample.kfpx/sample.pdf contained in the image
 docker run --rm -ti callassoftware/pdftoolbox-cli ./pdfToolbox sample.kfpx sample.pdf --licenseserver=<ip of a callas license server>
 ```
 
-
 ## howto create your own docker images
 
 assumption: there is a linux image build machine with the needed tools already installed (such as git, wget, tar, docker etc.)
@@ -42,7 +41,6 @@ cd ..
 ```
 docker build -t callassoftware/pdftoolbox-cli:v15-2-646-1 -f Dockerfile-debian $(pwd)
 ```
-
 
 ## ... try it out ...
 
