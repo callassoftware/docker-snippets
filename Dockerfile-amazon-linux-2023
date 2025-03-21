@@ -18,14 +18,14 @@ RUN dnf update -y && \
 #     cd /usr/bin && ln -s /opt/libreoffice24.8/program/soffice && \
 #     cd /usr/lib64 && test -f libssl3.so || ln -s libssl.so.3 libssl3.so 
 
-COPY callas_pdfToolboxCLI_x64_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
+COPY callas_pdfToolboxCLI_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-656 cli
 
 # amazon linux 2023 does not have /usr/bin/lsb_release. use a mockup instead
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
 

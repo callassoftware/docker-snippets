@@ -12,14 +12,14 @@ RUN dnf update -y && \
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
 # RUN dnf install -y libreoffice
 
-COPY callas_pdfToolboxCLI_x64_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
+COPY callas_pdfToolboxCLI_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-656 cli
 
 # almalinux does not have /usr/bin/lsb_release. use a mockup instead
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
 
