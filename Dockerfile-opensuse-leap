@@ -10,13 +10,13 @@ RUN zypper update -y && \
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
 # RUN zypper install -y libreoffice-officebean libreoffice-writer libreoffice-writer-extensions libreoffice-calc libreoffice-calc-extensions libreoffice-impress libreoffice-draw
 
-COPY callas_pdfToolboxCLI_x64_Linux_15-2-646-1 /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646-1
+COPY callas_pdfToolboxCLI_x64_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
 # remove some incompatible libs (libstdc++.so.6)
-RUN find /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646-1 -type l -name libstdc++.so.6 -exec rm {} +
+RUN find /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656 -type l -name libstdc++.so.6 -exec rm {} +
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646-1 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_15-2-646-1 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_x64_Linux_16-0-656 cli
 
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_15-2-646-1
+WORKDIR /opt/callas/callas_pdfToolboxCLI_x64_Linux_16-0-656
 
