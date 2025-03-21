@@ -32,7 +32,7 @@ mv callas_pdfToolboxCLI_x64_Linux_16-0-656 callas_pdfToolboxCLI_Linux_16-0-656
 before building the image you can optionally reduce the size of the resulting image by removing some pdfToolbox parts that you don't need for you specific use case. In other words: you can also create "essential" images by yourself
 
 ```
-cd callas_pdfToolboxCLI_x64_Linux_16-0-656
+cd callas_pdfToolboxCLI_Linux_16-0-656
 bash ../reduce-essential.sh
 cd ..
 ```
