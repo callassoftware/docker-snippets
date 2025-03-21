@@ -25,7 +25,7 @@ git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
 wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_16-0-656.tar.gz
 tar zxvpf callas_pdfToolboxCLI_x64_Linux_16-0-656.tar.gz
-mv callas_pdfToolboxCLI15_x64_Linux_16-0-656 callas_pdfToolboxCLI_x64_Linux_16-0-656
+mv callas_pdfToolboxCLI16_x64_Linux_16-0-656 callas_pdfToolboxCLI_x64_Linux_16-0-656
 ```
 
 ### optional: reduce resulting image size
