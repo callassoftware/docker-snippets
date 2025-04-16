@@ -13,6 +13,9 @@ RUN apt-get install -y \
                 libfreetype6 \
                 fonts-dejavu
 
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
+# RUN apt install -y --install-recommends libreoffice libreoffice-java-common
+
 FROM debian-enriched-with-fonts AS pdftoolbox-installed
 COPY callas_pdfToolboxCLI_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
 
