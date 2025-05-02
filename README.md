@@ -7,8 +7,8 @@ please see also our ready-to-use docker images on https://hub.docker.com/reposit
 note: Starting with pdfToolbox v15-1-639, these images support not only AMD64/Intel64, but also ARM64 as well
 ```
 docker pull callassoftware/pdftoolbox-cli
-docker pull callassoftware/pdftoolbox-cli:v16-0-656
-docker pull callassoftware/pdftoolbox-cli:v16-0-656-essential
+docker pull callassoftware/pdftoolbox-cli:v16-0-657
+docker pull callassoftware/pdftoolbox-cli:v16-0-657-essential
 ```
 run preflight using the sample.kfpx/sample.pdf contained in the image
 ```
@@ -23,27 +23,27 @@ assumption: there is a linux image build machine with the needed tools already i
 ```
 git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
-wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_16-0-656.tar.gz
-tar zxvpf callas_pdfToolboxCLI_x64_Linux_16-0-656.tar.gz
-mv callas_pdfToolboxCLI_x64_Linux_16-0-656 callas_pdfToolboxCLI_Linux_16-0-656
+wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_16-0-657.tar.gz
+tar zxvpf callas_pdfToolboxCLI_x64_Linux_16-0-657.tar.gz
+mv callas_pdfToolboxCLI_x64_Linux_16-0-657 callas_pdfToolboxCLI_Linux_16-0-657
 ```
 
 ### optional: reduce resulting image size
 before building the image you can optionally reduce the size of the resulting image by removing some pdfToolbox parts that you don't need for you specific use case. In other words: you can also create "essential" images by yourself
 
 ```
-cd callas_pdfToolboxCLI_Linux_16-0-656
+cd callas_pdfToolboxCLI_Linux_16-0-657
 bash ../reduce-essential.sh
 cd ..
 ```
 
 ### build the image
 ```
-docker build -t callassoftware/pdftoolbox-cli:v16-0-656 -f Dockerfile-debian $(pwd)
+docker build -t callassoftware/pdftoolbox-cli:v16-0-657 -f Dockerfile-debian $(pwd)
 ```
 
 ## ... try it out ...
 
 ```
-docker run --rm -ti callassoftware/pdftoolbox-cli:v16-0-656 ./pdfToolbox --version
+docker run --rm -ti callassoftware/pdftoolbox-cli:v16-0-657 ./pdfToolbox --version
 ```

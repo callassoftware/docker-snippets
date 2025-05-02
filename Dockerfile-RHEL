@@ -3,6 +3,9 @@ FROM redhat/ubi9
 RUN yum update -y && \
     yum install -y procps fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts
 
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
 # RUN yum install cabextract && 
@@ -16,14 +19,11 @@ RUN yum update -y && \
 #      cd LibreOffice_24.8.2.1_Linux_x86-64_rpm/RPMS && \
 #      rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice24.8/program/soffice
 
-COPY callas_pdfToolboxCLI_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
+COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-656 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-657 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-657 cli
 
-# almalinux does not have /usr/bin/lsb_release. use a mockup instead
-COPY lsb_release_mockup.sh /usr/bin
-RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 

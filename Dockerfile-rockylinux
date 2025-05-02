@@ -3,6 +3,9 @@ FROM rockylinux/rockylinux:8.10
 RUN dnf update -y && \
     dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts
 
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
 # RUN dnf install https://rpmfind.net/linux/dag/redhat/el7/en/x86_64/dag/RPMS/cabextract-1.4-1.el7.rf.x86_64.rpm && \
@@ -12,14 +15,11 @@ RUN dnf update -y && \
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
 # RUN dnf install -y libreoffice
 
-COPY callas_pdfToolboxCLI_Linux_16-0-656 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
+COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-656 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-656 cli
+RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-657 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-657 cli
 
-# almalinux does not have /usr/bin/lsb_release. use a mockup instead
-COPY lsb_release_mockup.sh /usr/bin
-RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-656
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
