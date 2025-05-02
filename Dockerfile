@@ -6,7 +6,8 @@ RUN apt-get update -y && apt-get upgrade -y \
                 apt-utils  \
                 net-tools \
                 fontconfig  \
-                fonts-dejavu
+                fonts-dejavu \
+				libatomic1
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
