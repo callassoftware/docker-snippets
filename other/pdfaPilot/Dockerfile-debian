@@ -1,0 +1,32 @@
+# note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
+
+FROM debian
+RUN apt-get update -y && apt-get upgrade -y \
+        && apt-get install -y  \
+                apt-utils  \
+                procps \
+                net-tools \
+                fontconfig  \
+                fonts-dejavu \
+                libatomic1 
+
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+
+# optional - install microsoft truetype fonts ...
+# RUN apt-get install -y ttf-mscorefonts-installer
+
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
+# RUN apt-get install -y --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
+
+# wget https://www.callassoftware.com/extranet/callas_pdfaPilotCLIandServer/callas_pdfaPilotCLI_x64_Linux_14-0-392.tar.gz
+# tar zxvpf callas_pdfaPilotCLI_x64_Linux_14-0-392.tar.gz
+# mv callas_pdfaPilotCLI_x64_Linux_14-0-392 callas_pdfaPilotCLI_Linux_14-0-392
+COPY callas_pdfaPilotCLI_Linux_14-0-392 /opt/callas/callas_pdfaPilotCLI_Linux_14-0-392
+
+# add some "convenience" symlinks ...
+RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-0-392 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-0-392 cli
+
+WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-0-392
+
