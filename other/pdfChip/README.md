@@ -1,7 +1,7 @@
 # docker snippets for callas pdfChip
 
 ## ready to use pdfChip docker images on Dockerhub
-e.g. perform a _HTML to PDF conversion_ using the hello.html (contained in the image)
+e.g. perform an _HTML to PDF conversion_ using the hello.html (contained in the image)
 
 ```
 docker run --rm -ti callassoftware/pdfchip ./pdfChip hello.html output.pdf --licenseserver=<ip of a callas license server>
