@@ -1,0 +1,43 @@
+# note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
+
+FROM debian
+
+# get and unpack and copy the callas pdfEngine SDK installer package ...
+# wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
+# tar callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
+# mv callas_pdfEngineSDK_x64_Linux_16-0-657 callas_pdfEngineSDK_16-0-657
+# cd callas_pdfEngineSDK_16-0-657 callas_pdfEngineSDK_16-0-657/sample-C
+# some modifications are needed to use a license server instead of a local actiavtion
+# patch -p0 < ../../pdfToolboxSample.cpp.patch
+# cd unix
+# re-compile ...
+# gmake
+
+COPY callas_pdfEngineSDK_16-0-657 /opt/callas/callas_pdfEngineSDK_16-0-657
+
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+
+# add some "convenience" symlinks ...
+RUN cd /opt/callas && ln -s callas_pdfEngineSDK_16-0-657 pdfchip-cli && ln -s callas_pdfEngineSDK_16-0-657 cli
+RUN apt-get update -y && apt-get upgrade -y \
+        && apt-get install -y  \
+                apt-utils  \
+                locales \
+                procps \
+                net-tools \
+                fontconfig  \
+                fonts-dejavu \
+                libatomic1 \
+        && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=C.UTF-8 && apt-get purge -y locales && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+          
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+
+# optional - install microsoft truetype fonts ...
+# RUN apt-get install -y ttf-mscorefonts-installer
+
+
+WORKDIR /opt/callas/callas_pdfEngineSDK_16-0-657/sample-C/unix
