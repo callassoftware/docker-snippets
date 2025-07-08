@@ -14,7 +14,7 @@ mv callas_pdfEngineSDK_x64_Linux_16-0-657 callas_pdfEngineSDK_16-0-657
 
 ## patch and rebuild the pdfToolbox sample application
 ```
-cd callas_pdfEngineSDK_16-0-657 callas_pdfEngineSDK_16-0-657/sample-C
+cd callas_pdfEngineSDK_16-0-657/sample-C
 patch -p0 < ../../pdfToolboxSample.cpp.patch
 cd unix
 gmake
