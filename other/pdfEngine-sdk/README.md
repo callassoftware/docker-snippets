@@ -9,9 +9,11 @@ To demonstrate how to containerize such a use case, we provide an example Docker
 wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
 tar callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
 mv callas_pdfEngineSDK_x64_Linux_16-0-657 callas_pdfEngineSDK_16-0-657
+```
 
 
 ## patch and rebuild the pdfToolbox sample application
+```
 cd callas_pdfEngineSDK_16-0-657 callas_pdfEngineSDK_16-0-657/sample-C
 patch -p0 < ../../pdfToolboxSample.cpp.patch
 cd unix
