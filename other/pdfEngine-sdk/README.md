@@ -28,9 +28,14 @@ e.g. perform an _--extracttext_ operation using the sample.pdf (contained in the
 docker run --rm -ti -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf' callassoftware/pdfengine:v16-0-657 ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
 ```
 
-as you can see there are some "specials things" here. First a value of 'ignore' is used for the two keycodes that normally can be passed to the pdfToolbox sample applicaton when it is run without a docker environment. Second there are two 
-enviroment variables passed to the docker container ...
+as you can see there are some "specials things" here.
+
+
+First there are two enviroment variables passed to the docker container to use callas license servers instead of a regular local activation ... 
 
  - CALLAS_LICENSESERVER_URLS contains one ore more License Server IP addresses (or hostnames), separated by a semicolon
  - CALLAS_LICENSESERVER_MSG contains an optional wallet-id to be passed to the callas License Servers specified via CALLAS_LICENSESERVER_URLS. This is typically optional for en premise License Servers, but mandatory for the licenseserver in the cloud
 
+This is needed be because a regular local activation is bound to the hardware which is not working in the docker case.
+
+Second a value of 'ignore' is used for the two keycodes that can be passed to the normal unmodified pdfToolbox sample applicaton when it is run without a docker environment. In this case the two keycodes are simply placeholders that are ignored (you can also use arbitrary other values instead of 'ignore')
