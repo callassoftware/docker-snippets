@@ -82,15 +82,6 @@
  				log( "callas pdfEngine SDK initialized" );
  				initialized_ = true;
  			}
-@@ -666,7 +716,7 @@
- 		{
- 			case PTB_efsFixupSuccess    : std::cout << "Success"     ; break;
- 			case PTB_efsFixupFailure    : std::cout << "Failure"     ; break;
--//			case PTB_efsFixupNotRequired: std::cout << "Not Required"; break;
-+			case PTB_efsFixupNotRequired: std::cout << "Not Required"; break;
- 		}
- 		std::cout << std::endl;
- 		std::string reason = getString( idReason );
 @@ -3131,7 +3181,7 @@
  #endif
  
