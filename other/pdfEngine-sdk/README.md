@@ -34,7 +34,7 @@ as you can see there are some "specials things" here.
 First there are two enviroment variables passed to the docker container to use callas license servers instead of a regular local activation ... 
 
  - CALLAS_LICENSESERVER_URLS contains one ore more License Server IP addresses (or hostnames), separated by a semicolon
- - CALLAS_LICENSESERVER_MSG contains an optional wallet-id to be passed to the callas License Servers specified via CALLAS_LICENSESERVER_URLS. This is typically optional for en premise License Servers, but mandatory for the licenseserver in the cloud
+ - CALLAS_LICENSESERVER_MSG contains an optional wallet-id to be passed to the callas License Servers specified via CALLAS_LICENSESERVER_URLS. This is usually optional for on-premise licence servers, but mandatory for the licence server in the cloud.
 
 This is needed be because a regular local activation is bound to the hardware which is not working in the docker case.
 
