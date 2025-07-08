@@ -38,4 +38,4 @@ First there are two enviroment variables passed to the docker container to use c
 
 This is needed be because a regular local activation is bound to the hardware which is not working in the docker case.
 
-Second a value of 'ignore' is used for the two keycodes that can be passed to the normal unmodified pdfToolbox sample applicaton when it is run without a docker environment. In this case the two keycodes are simply placeholders that are ignored (you can also use arbitrary other values instead of 'ignore')
+Second a value of 'ignore' is used for the two keycodes that can be passed to the normal unmodified pdfToolbox sample applicaton when it is run locally (without a docker environment). In this case the two keycodes are simply placeholders that are ignored (you can also use arbitrary other values instead of 'ignore')
