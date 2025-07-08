@@ -4,7 +4,7 @@ note: Unlike pdfToolbox, pdfaPilot, or pdfChip, there are no prebuilt "ready-to-
 
 To demonstrate how to containerize such a use case, we provide an example Dockerfile using one of the precompiled sample C applications with some modifications that are needed to use a callas license server instead of a local 'activation'. This serves as a practical reference to highlight the necessary prerequisites and setup steps.
 
-## download and unpack and patch the pdfEngine-SDK tar.gz installer 
+## download and unpack the pdfEngine-SDK tar.gz installer 
 ```
 wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
 tar callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
