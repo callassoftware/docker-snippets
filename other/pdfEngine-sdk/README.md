@@ -26,14 +26,29 @@ cd unix
 gmake
 ```
 
-> **Troubleshooting:**  
-If you encounter the following linker error:
+> **Troubleshooting 1:**  
+pdfEngine-SDK has been compiled using gcc-9.5. If you able to compile the sample application but then receive a runtime error like this
+
+```
+./pdfToolboxSample
+  pdfToolboxSample.bin: lib/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by pdfToolboxSample.bin)
+```
+
+then you are compiling the sample application with a newer compiler.  As a workaround you may need to remove the shipped lib/libstdc++.so.6 to fix it:
+
+```bash
+rm lib/libstdc++.so.6
+```
+
+
+> **Troubleshooting 2:**  
+pdfEngine-SDK has been compiled using gcc-9.5. If you are encounter the following linker error:
 
 ```
 /usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26'
 ```
 
-You may need to create a symbolic link to fix it:
+then you are compiling the sample application with an older compiler.  As a workaround you may need to create a symbolic link to fix it:
 
 ```bash
 cd lib
