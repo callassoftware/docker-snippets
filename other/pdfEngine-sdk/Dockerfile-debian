@@ -22,6 +22,12 @@ RUN apt-get update -y && apt-get upgrade -y \
                 fonts-dejavu \
                 libatomic1 \
         && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=C.UTF-8 && apt-get purge -y locales && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+# optional - install microsoft truetype fonts ...
+# RUN apt-get install -y ttf-mscorefonts-installer
+
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
+# apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
           
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
