@@ -32,6 +32,8 @@ ENV LC_ALL=C.UTF-8
 # optional - install microsoft truetype fonts ...
 # RUN apt-get install -y ttf-mscorefonts-installer
 
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
+# RUN apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
 
 WORKDIR /opt/callas/callas_pdfChip_2-6-098
 
