@@ -27,7 +27,7 @@ RUN apt-get update -y && apt-get upgrade -y \
 # RUN apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
-# apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
+# RUN apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
           
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
