@@ -24,6 +24,7 @@ RUN apt-get update -y && apt-get upgrade -y \
         && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=C.UTF-8 && apt-get purge -y locales && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # optional - install microsoft truetype fonts ...
+# RUN sed -i 's,main,main contrib non-free non-free-firmware,' /etc/apt/sources.list.d/debian.sources
 # RUN apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
