@@ -45,7 +45,7 @@ ln -s libstdc++.so.6 libstdc++.so
 ## Step 3: Build the Docker Image
 
 ```bash
-docker build -t callassoftware/pdfengine:v16-0-657 -f Dockerfile-debian $(pwd)
+docker build -t callassoftware/pdfengine:v16-0-657 -f Dockerfile-debian .
 ```
 
 ---
@@ -55,7 +55,10 @@ docker build -t callassoftware/pdfengine:v16-0-657 -f Dockerfile-debian $(pwd)
 You can now run the image to test an example operation, such as text extraction from a PDF:
 
 ```bash
-docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37'   -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf'   callassoftware/pdfengine:v16-0-657   ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
+docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
+                      -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf'   \
+                      callassoftware/pdfengine:v16-0-657  \
+                      ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
 ```
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
