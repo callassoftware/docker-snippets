@@ -39,7 +39,7 @@ cd ..
 
 ### build the image
 ```
-docker build -t callassoftware/pdftoolbox-cli:v16-0-657 -f Dockerfile-debian $(pwd)
+docker build -t callassoftware/pdftoolbox-cli:v16-0-657 -f Dockerfile-debian .
 ```
 
 ## ... try it out ...
