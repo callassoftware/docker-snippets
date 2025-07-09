@@ -1,5 +1,7 @@
 # docker-snippets
-some docker related snippets and howtos for the pdfToolbox-cli
+some docker related snippets and howtos mainly for the pdfToolbox-cli
+
+> note: docker-snippets for other callas products (pdfaPilot, pdfChip) can be found inside the 'other' subdirectory
 
 ## ready to use docker images on Dockerhub
 please see also our ready-to-use docker images on https://hub.docker.com/repository/docker/callassoftware/pdftoolbox-cli
