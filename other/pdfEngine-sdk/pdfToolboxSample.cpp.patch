@@ -1,5 +1,5 @@
---- orig.pdfToolboxSample.cpp	2025-07-08 11:57:55.753860387 +0200
-+++ pdfToolboxSample.cpp	2025-07-08 15:05:52.337419351 +0200
+--- orig.pdfToolboxSample.cpp	2025-07-07 18:31:15.147618540 +0200
++++ pdfToolboxSample.cpp	2025-07-09 11:17:16.427059108 +0200
 @@ -107,6 +107,39 @@
  		std::string msg_;
  };
@@ -82,16 +82,7 @@
  				log( "callas pdfEngine SDK initialized" );
  				initialized_ = true;
  			}
-@@ -3131,7 +3181,7 @@
- #endif
- 
- 		TArgumentVec args;
--		for( std::size_t i = 0; i < argc; ++i)
-+		for( int i = 0; i < argc; ++i)
- 		{
- 			// The second keycode argument (for DeviceLink addon) is optional now
- 			if( i == 2 ) {
-@@ -3161,15 +3211,35 @@
+@@ -3161,15 +3211,36 @@
  		// you can also change the internal base temporary folder by specifiing PTB_eptTemp
  		// PTB_LibSetPath( PTB_eptTemp, reinterpret_cast< const PTB_Path_t* >( "<Path>" ) );
  
@@ -111,8 +102,9 @@
 +		PTB_ELicenseServerType ls_types(static_cast<PTB_ELicenseServerType> (PTB_eelstRuncount|PTB_eelstCredits));
 +		require_noErr( PTB_LicenseServerSetup2( &ls_urls[0], ls_urls.size(), ls_timeout, ls_types, ls_message ), true, false);
 +
-+		// note: you can do some "fine tuning" by using explicit PTB_LicenseServerGetLicense (and PTB_LicenseServerFreeLicense) calls. If you dont use it, then 
-+		//       PTB_LicenseServerSetup2 automatically surrounds each PTB_xxxxx call with an implicit PTB_LicenseServerGetLicense and PTB_LicenseServerFreeLicense call
++		// note: you can do some "licensing fine tuning" by using explicit PTB_LicenseServerGetLicense (and PTB_LicenseServerFreeLicense) calls. If you
++		//       dont use it, then PTB_LicenseServerSetup2 automatically surrounds each PTB_xxxxx call with an implicit call to PTB_LicenseServerGetLicense
++                //       and PTB_LicenseServerFreeLicense
 +		// std::cerr << "explictly requesting a remote license ..." << std::endl;
 +		// PTB_ELicenseServerType usedLicense = PTB_eelstNone;
 +		// require_noErr( PTB_LicenseServerGetLicense( ls_timeout, ls_types, &usedLicense ), true, false);

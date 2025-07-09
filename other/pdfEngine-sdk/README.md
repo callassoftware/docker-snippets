@@ -1,46 +1,79 @@
-# docker snippets for callas pdfEngine-SDK
 
-note: Unlike pdfToolbox, pdfaPilot, or pdfChip, there are no prebuilt "ready-to-use" Docker images for the pdfEngine SDK available on Docker Hub. This is because the pdfEngine SDK is not a standalone application, but a Software Development Kit intended for building custom applications.
+# Docker Snippets for Callas PDFEngine SDK
 
-To demonstrate how to containerize such a use case, we provide an example Dockerfile using one of the precompiled sample C applications with some modifications that are needed to use a callas license server instead of a local 'activation'. This serves as a practical reference to highlight the necessary prerequisites and setup steps.
+> **Note:** Unlike `pdfToolbox`, `pdfaPilot`, or `pdfChip`, there are no prebuilt "ready-to-use" Docker images for the **PDFEngine SDK** on Docker Hub. This is because the PDFEngine SDK is not a standalone application, but a **Software Development Kit** intended for building custom applications.
 
-## download and unpack the pdfEngine-SDK tar.gz installer 
-```
+To demonstrate how to containerize a typical use case, this repository provides an example Dockerfile. It uses a **modified version of a precompiled C sample application** and is configured to work with an **Callas License Server** (instead of relying on a local activation). This serves as a practical reference to highlight all necessary prerequisites and setup steps.
+
+---
+
+## Step 1: Download and Unpack the SDK
+
+```bash
 wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
-tar callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
+tar xzf callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
 mv callas_pdfEngineSDK_x64_Linux_16-0-657 callas_pdfEngineSDK_16-0-657
 ```
 
+---
 
-## patch and rebuild the pdfToolbox sample application
-```
+## Step 2: Patch and Rebuild the Sample Application
+
+```bash
 cd callas_pdfEngineSDK_16-0-657/sample-C
 patch -p0 < ../../pdfToolboxSample.cpp.patch
 cd unix
 gmake
 ```
 
-## build the docker image
+> **Troubleshooting:**  
+If you encounter the following linker error:
+
 ```
+/usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26'
+```
+
+You may need to create a symbolic link to fix it:
+
+```bash
+cd lib
+ln -s libstdc++.so.6 libstdc++.so
+```
+
+---
+
+## Step 3: Build the Docker Image
+
+```bash
 docker build -t callassoftware/pdfengine:v16-0-657 -f Dockerfile-debian $(pwd)
 ```
 
-## ... try it out ...
+---
 
-e.g. perform an _--extracttext_ operation using the sample.pdf (contained in the image)
+## Step 4: Run the Docker Container
 
+You can now run the image to test an example operation, such as text extraction from a PDF:
+
+```bash
+docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37'   -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf'   callassoftware/pdfengine:v16-0-657   ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
 ```
-docker run --rm -ti -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf' callassoftware/pdfengine:v16-0-657 ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
-```
 
-as you can see there are some "specials things" here.
+This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
+---
 
-First there are two enviroment variables passed to the docker container to use callas license servers instead of a regular local activation ... 
+## Notes
 
- - CALLAS_LICENSESERVER_URLS contains one ore more License Server IP addresses (or hostnames), separated by a semicolon
- - CALLAS_LICENSESERVER_MSG contains an optional wallet-id to be passed to the callas License Servers specified via CALLAS_LICENSESERVER_URLS. This is usually optional for on-premise licence servers, but mandatory for the licence server in the cloud.
+### 1. License Server Integration
 
-This is needed be because a regular local activation is bound to the hardware which is not working in the docker case.
+Because Docker containers don't support local hardware-based license activations, you must use **Callas License Servers** via environment variables:
 
-Second a value of 'ignore' is used for the two keycodes that can be passed to the normal unmodified pdfToolbox sample applicaton when it is run locally (without a docker environment). In this case the two keycodes are simply placeholders that are ignored (you can also use arbitrary other values instead of 'ignore')
+- `CALLAS_LICENSESERVER_URLS`:  
+  One or more license server IPs or hostnames, separated by semicolons.
+
+- `CALLAS_LICENSESERVER_MSG`:  
+  An optional wallet ID required by **cloud-based** license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
+
+### 2. Placeholder Keycodes
+
+The two `ignore` values in the example command represent placeholder keycodes. These are normally required when running the unmodified sample app locally but are ignored in this Docker-based setup. You can use any arbitrary strings in their place.
