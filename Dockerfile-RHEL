@@ -1,3 +1,4 @@
+# FROM redhat/ubi9:9.6
 FROM redhat/ubi9
 
 RUN yum update -y && \
@@ -8,22 +9,26 @@ COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN yum install cabextract && 
-#    yum install https://rpmfind.net/linux/almalinux/9.5/devel/x86_64/os/Packages/xorg-x11-font-utils-7.5-53.el9.x86_64.rpm && \
-#    yum install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+
+# RUN yum install mkfontscale \
+#    && yum install https://www.cabextract.org.uk/cabextract-1.11-1.x86_64.rpm \
+#    && yum install https://rpmfind.net/linux/fedora/linux/releases/39/Everything/x86_64/os/Packages/x/xorg-x11-font-utils-7.5-56.fc39.x86_64.rpm \
+#    && yum install https://rpmfind.net/linux/sourceforge/m/ms/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
-# RUN yum install -y wget libXinerama cairo cups-libs libSM java
-# RUN cd /root && wget https://download.documentfoundation.org/libreoffice/stable/24.8.2/rpm/x86_64/LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
-#      tar xvpf LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
-#      cd LibreOffice_24.8.2.1_Linux_x86-64_rpm/RPMS && \
-#      rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice24.8/program/soffice
+# RUN yum install -y libXinerama cairo cups-libs libSM java
+# RUN cd /root && curl -LO https://download.documentfoundation.org/libreoffice/stable/25.2.4/rpm/x86_64/LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
+#      && tar xvpf LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
+#      && cd LibreOffice_25.2.4.3_Linux_x86-64_rpm/RPMS \
+#      && rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice25.2/program/soffice
 
 COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
 # add some "convenience" symlinks ...
 RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-657 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-657 cli
 
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
