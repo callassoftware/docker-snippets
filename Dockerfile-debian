@@ -1,6 +1,5 @@
-# note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
+FROM debian:12-slim
 
-FROM debian
 RUN apt-get update -y && apt-get upgrade -y \
         && apt-get install -y  \
                 apt-utils  \
@@ -25,6 +24,9 @@ COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_
 
 # add some "convenience" symlinks ...
 RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-657 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-657 cli
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 

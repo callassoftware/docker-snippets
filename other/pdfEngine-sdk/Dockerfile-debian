@@ -1,6 +1,4 @@
-# note: for multistage builds see https://docs.docker.com/develop/develop-images/multistage-build
-
-FROM debian
+FROM debian:12-slim
 
 # note: see README.md regarding howto get and prepare (aka modify) callas_pdfEngineSDK_16-0-657 for usage within a container environment
 
