@@ -2,10 +2,7 @@
 
 FROM debian
 
-# get and unpack and copy the callas pdfChip installer package ...
-# wget https://www.callassoftware.com/extranet/callas_pdfChip/callas_pdfChip_x64_Linux_2-6-098.tar.gz
-# tar zxvpf callas_pdfChip_x64_Linux_2-6-098.tar.gz
-# mv callas callas_pdfChip_x64_Linux_2-6-098 callas_pdfChip_Linux_2-6-098
+# note: please follow the instructions from README.md to prepare the callas_pdfChip_2-6-098 directory ...
 COPY callas_pdfChip_2-6-098 /opt/callas/callas_pdfChip_2-6-098
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
