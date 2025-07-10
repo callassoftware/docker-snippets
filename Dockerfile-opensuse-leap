@@ -20,6 +20,8 @@ RUN find /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657 -type l -name libstdc++
 # add some "convenience" symlinks ...
 RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-0-657 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-0-657 cli
 
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
