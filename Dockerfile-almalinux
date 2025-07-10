@@ -1,16 +1,14 @@
 FROM almalinux:10-minimal
 
 RUN microdnf update -y && \
-    microdnf install -y dnf tar fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic
+    microdnf install -y dnf tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN dnf install mkfontscale \
-#    && dnf install https://rpmfind.net/linux/dag/redhat/el7/en/x86_64/dag/RPMS/cabextract-1.4-1.el7.rf.x86_64.rpm \
-#    && dnf install xorg-x11-font-utils \
+# RUN dnf install mkfontscale cabextract xorg-x11-font-utils \
 #    && dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
