@@ -9,7 +9,7 @@ RUN apt-get update -y \
                 libkeyutils1 \
                 fontconfig \
                 fonts-dejavu \
-				libatomic1
+                libatomic1
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
