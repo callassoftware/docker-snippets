@@ -9,8 +9,8 @@ COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN dnf install mkfontscale cabextract xorg-x11-font-utils \
-#    && dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+# RUN dnf install -y mkfontscale cabextract xorg-x11-font-utils \
+#    && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
 # RUN dnf install -y libXinerama cairo cups-libs libSM java
