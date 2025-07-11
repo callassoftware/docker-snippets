@@ -1,8 +1,8 @@
 FROM rockylinux/rockylinux:10-minimal
 
 RUN microdnf update -y && \
-    microdnf install -y dnf tar fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
-        && cd /usr/lib64 && test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0
+    microdnf install -y dnf tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+        && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin

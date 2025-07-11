@@ -1,17 +1,17 @@
 FROM amazonlinux:2023.7.20250623.1
 
-RUN dnf update -y && \
-    dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
-        && cd /usr/lib64 && test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0
+RUN dnf update -y  \
+    && dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+        && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN dnf install -y cabextract && \
-#     dnf install -y xorg-x11-font-utils && \
-#     dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+# RUN dnf install -y cabextract \
+#     && dnf install -y xorg-x11-font-utils \
+#     && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
 # RUN dnf install -y tar gzip libXinerama cups-libs java-21-amazon-corretto libxslt libX11-xcb nss && \
