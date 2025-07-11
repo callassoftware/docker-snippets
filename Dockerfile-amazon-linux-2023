@@ -1,4 +1,4 @@
-FROM amazonlinux:2023.6.20241121.0
+FROM amazonlinux:2023.7.20250623.1
 
 RUN dnf update -y && \
     dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic
@@ -12,14 +12,14 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 #     dnf install -y xorg-x11-font-utils && \
 #     dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
-# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
-# RUN dnf install -y wget tar gzip libXinerama cups-libs java-21-amazon-corretto libxslt libX11-xcb nss && \
-#     cd /tmp && wget https://download.documentfoundation.org/libreoffice/stable/24.8.2/rpm/x86_64/LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
-#     tar xvpf LibreOffice_24.8.2_Linux_x86-64_rpm.tar.gz && \
-#     cd LibreOffice_24.8.2.1_Linux_x86-64_rpm/RPMS && \
-#     rpm -Uvh *.rpm && \
-#     cd /usr/bin && ln -s /opt/libreoffice24.8/program/soffice && \
-#     cd /usr/lib64 && test -f libssl3.so || ln -s libssl.so.3 libssl3.so 
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
+# RUN dnf install -y tar gzip libXinerama cups-libs java-21-amazon-corretto libxslt libX11-xcb nss && \
+#     cd /tmp && curl --output LibreOffice.tar.gz -L https://download.documentfoundation.org/libreoffice/stable/25.2.4/rpm/x86_64/LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
+#     && tar xvpf LibreOffice.tar.gz --strip \
+#     && cd RPMS \
+#     && rpm -Uvh *.rpm \
+#     && cd /usr/bin && ln -s /opt/libreoffice25.2/program/soffice \
+#     && cd /usr/lib64 && test -f libssl3.so || ln -s libssl.so.3 libssl3.so 
 
 COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
