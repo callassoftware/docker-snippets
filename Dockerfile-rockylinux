@@ -1,19 +1,24 @@
-FROM rockylinux/rockylinux:8.10
+FROM rockylinux/rockylinux:10-minimal
 
-RUN dnf update -y && \
-    dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic
+RUN microdnf update -y && \
+    microdnf install -y dnf tar fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+        && cd /usr/lib64 && test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN dnf install https://rpmfind.net/linux/dag/redhat/el7/en/x86_64/dag/RPMS/cabextract-1.4-1.el7.rf.x86_64.rpm && \
-#    dnf install https://rpmfind.net/linux/almalinux/9.5/devel/x86_64/os/Packages/xorg-x11-font-utils-7.5-53.el9.x86_64.rpm && \
-#    dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+# RUN dnf install -y mkfontscale cabextract xorg-x11-font-utils \
+#    && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
-# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 500MB to the image ...
-# RUN dnf install -y libreoffice
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
+# RUN dnf install -y libXinerama cairo cups-libs libSM java
+# RUN cd /root && curl -LO https://download.documentfoundation.org/libreoffice/stable/25.2.4/rpm/x86_64/LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
+#      && tar xvpf LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
+#      && cd LibreOffice_25.2.4.3_Linux_x86-64_rpm/RPMS \
+#      && rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice25.2/program/soffice
+
 
 COPY callas_pdfToolboxCLI_Linux_16-0-657 /opt/callas/callas_pdfToolboxCLI_Linux_16-0-657
 
