@@ -1,7 +1,8 @@
 FROM amazonlinux:2023.7.20250623.1
 
 RUN dnf update -y && \
-    dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic
+    dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+        && cd /usr/lib64 && test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
