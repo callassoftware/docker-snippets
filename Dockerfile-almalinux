@@ -1,7 +1,7 @@
 FROM almalinux:10-minimal
 
-RUN microdnf update -y && \
-    microdnf install -y dnf tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+RUN microdnf update -y \
+    && microdnf install -y dnf tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
     && cd /usr/lib64 && test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
@@ -10,7 +10,7 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 
 # optional - install microsoft truetype fonts ...
 # RUN dnf install -y mkfontscale cabextract xorg-x11-font-utils \
-#    && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+#     && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
 # RUN dnf install -y libXinerama cairo cups-libs libSM java
