@@ -15,7 +15,7 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 
 # optional - install microsoft truetype fonts ...
 # RUN sed -i 's,main,main contrib non-free non-free-firmware,' /etc/apt/sources.list.d/debian.sources
-# RUN apt-get install -y ttf-mscorefonts-installer
+# RUN apt-get update -y && apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
 # RUN apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless

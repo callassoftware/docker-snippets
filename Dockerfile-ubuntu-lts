@@ -16,7 +16,7 @@ COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN apt install -y ttf-mscorefonts-installer
+# RUN apt update -y && apt install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
 # RUN apt install -y --install-recommends libreoffice libreoffice-java-common
