@@ -85,7 +85,9 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ### 1. License Server Integration
 
-Because Docker containers don't support local hardware-based license activations, you must use **Callas License Servers** via environment variables:
+Because Docker containers don't support local hardware-based license activations, you must use an OEM license or a  **Callas License Servers** via environment variables:
+
+> **Note:** the C sample modification only works for the case when a license server is to be used. It is not needed (and not working) for OEM licensing
 
 - `CALLAS_LICENSESERVER_URLS`:  
   One or more license server IPs or hostnames, separated by semicolons.
