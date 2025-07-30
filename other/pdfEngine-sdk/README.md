@@ -3,8 +3,9 @@
 
 > **Note:** Unlike `pdfToolbox`, `pdfaPilot`, or `pdfChip`, there are no prebuilt "ready-to-use" Docker images for the **PDFEngine SDK** on Docker Hub. This is because the PDFEngine SDK is not a standalone application, but a **Software Development Kit** intended for building custom applications.
 
-To demonstrate how to containerize a typical use case, this repository provides an example Dockerfile. It uses a **modified version of a precompiled C sample application** and is configured to work with a **Callas License Server** (instead of relying on a local activation). This serves as a practical reference to highlight all necessary prerequisites and setup steps.
+To demonstrate how to containerize a typical use case, this repository provides an example Dockerfile. It uses a **modified version of a precompiled C sample application** and is configured to work with a **Callas License Server** (instead of relying on a local OEM activation). This serves as a practical reference to highlight all necessary prerequisites and setup steps.
 
+> **Note:** the C sample modification is only needed for the case when a license server is to be used. It is not needed for OEM licensing
 ---
 
 ## Step 1: Download and Unpack the SDK
