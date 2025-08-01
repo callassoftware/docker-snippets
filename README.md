@@ -23,27 +23,27 @@ assumption: there is a linux image build machine with the needed tools already i
 ```
 git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
-wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_16-1-661.tar.gz
-tar zxvpf callas_pdfToolboxCLI_x64_Linux_16-1-661.tar.gz
-mv callas_pdfToolboxCLI_x64_Linux_16-1-661 callas_pdfToolboxCLI_Linux_16-1-661
+wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_16-1-662.tar.gz
+tar zxvpf callas_pdfToolboxCLI_x64_Linux_16-1-662.tar.gz
+mv callas_pdfToolboxCLI_x64_Linux_16-1-662 callas_pdfToolboxCLI_Linux_16-1-662
 ```
 
 ### optional: reduce resulting image size
 Before building the image, you can optionally reduce its size by removing pdfToolbox components that aren't needed for your specific use case. This allows you to create a smaller "essential" image.
 
 ```
-cd callas_pdfToolboxCLI_Linux_16-1-661
+cd callas_pdfToolboxCLI_Linux_16-1-662
 bash ../reduce-essential.sh
 cd ..
 ```
 
 ### build the image
 ```
-docker build -t callassoftware/pdftoolbox-cli:v16-1-661 -f Dockerfile-debian .
+docker build -t callassoftware/pdftoolbox-cli:v16-1-662 -f Dockerfile-debian .
 ```
 
 ## ... try it out ...
 
 ```
-docker run --rm -ti callassoftware/pdftoolbox-cli:v16-1-661 ./pdfToolbox --version
+docker run --rm -ti callassoftware/pdftoolbox-cli:v16-1-662 ./pdfToolbox --version
 ```
