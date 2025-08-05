@@ -11,17 +11,17 @@ To demonstrate how to containerize a typical use case, this repository provides 
 ## Step 1: Download and Unpack the SDK
 
 ```bash
-wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
-tar xzf callas_pdfEngineSDK_x64_Linux_16-0-657.tar.gz
-mv callas_pdfEngineSDK_x64_Linux_16-0-657 callas_pdfEngineSDK_16-0-657
+wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
+tar xvpf callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
+mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 ```
 
 ---
 
-## Step 2: Patch and Rebuild the Sample Application
+## Step 2: Patch and Rebuild the Sample Application to use a callas license server
 
 ```bash
-cd callas_pdfEngineSDK_16-0-657/sample-C
+cd callas_pdfEngineSDK_16-1-662/sample-C
 patch -p0 < ../../pdfToolboxSample.cpp.patch
 cd unix
 gmake
@@ -61,7 +61,7 @@ ln -s libstdc++.so.6 libstdc++.so
 ## Step 3: Build the Docker Image
 
 ```bash
-docker build -t callassoftware/pdfengine:v16-0-657 -f Dockerfile-debian .
+docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 ```
 
 ---
@@ -72,8 +72,8 @@ You can now run the image to test an example operation, such as text extraction 
 
 ```bash
 docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
-                      -e 'CALLAS_LICENSESERVER_MSG=asdfasdfasdfsdfsdf'   \
-                      callassoftware/pdfengine:v16-0-657  \
+                      -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
+                      callassoftware/pdfengine:v16-1-662  \
                       ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
 ```
 

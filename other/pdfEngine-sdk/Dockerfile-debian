@@ -1,15 +1,15 @@
 FROM debian:12-slim
 
-# note: see README.md regarding howto get and prepare (aka modify) callas_pdfEngineSDK_16-0-657 for usage within a container environment
+# note: see README.md regarding howto get and prepare (aka modify) callas_pdfEngineSDK_16-1-662 for usage within a container environment
 
-COPY callas_pdfEngineSDK_16-0-657 /opt/callas/callas_pdfEngineSDK_16-0-657
+COPY callas_pdfEngineSDK_16-1-662 /opt/callas/callas_pdfEngineSDK_16-1-662
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfEngineSDK_16-0-657 callas-sdk && ln -s callas_pdfEngineSDK_16-0-657 sdk 
+RUN cd /opt/callas && ln -s callas_pdfEngineSDK_16-1-662 callas-sdk && ln -s callas_pdfEngineSDK_16-1-662 sdk 
 RUN apt-get update -y && apt-get upgrade -y \
         && apt-get install -y  \
                 apt-utils  \
@@ -36,4 +36,4 @@ ENV LC_ALL=C.UTF-8
 # RUN apt-get install -y ttf-mscorefonts-installer
 
 
-WORKDIR /opt/callas/callas_pdfEngineSDK_16-0-657/sample-C/unix
+WORKDIR /opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix
