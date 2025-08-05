@@ -1,0 +1,37 @@
+--- src/common/Init.cs.orig	2025-08-05 15:55:45.165494658 +0200
++++ src/common/Init.cs	2025-08-05 15:55:52.661329493 +0200
+@@ -22,7 +22,33 @@
+             // RequireNoError(CLib.SetLibraryPath(CLib.EPathType.Temp, "/tmp/myowntemp"));
+             // RequireNoError(CLib.SetLibraryPath(CLib.EPathType.Cache, "/tmp/myowncache"));
+ 
+-            RequireNoError(InitializeLibrary(kc1, kc2==null ? kc1 : kc2, "en"),  "initialize");
++            // RequireNoError(InitializeLibrary(kc1, kc2==null ? kc1 : kc2, "en"),  "initialize");
++
++            // note: use keycodes with a value of 'null' to use a callas license server
++            RequireNoError(InitializeLibrary(null, null, "en"),  "initialize");
++
++            Console.WriteLine("setting up remote license server(s) ...");
++            string env_ls_urls = Environment.GetEnvironmentVariable("CALLAS_LICENSESERVER_URLS");
++            if (string.IsNullOrEmpty(env_ls_urls))
++            {
++                Console.WriteLine("Environment variable CALLAS_LICENSESERVER_URLS is not set or empty - good bye");
++                Environment.Exit(1);
++            }
++            string[] ls_urls = env_ls_urls.Split(new string[] { ";" }, StringSplitOptions.None);
++            string ls_msg = Environment.GetEnvironmentVariable("CALLAS_LICENSESERVER_MSG");
++            uint ls_timeout = 5;
++            CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_types = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Runcount | CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Credits;
++
++            RequireNoError(CallasSoftware.PDFEngineCore.CLib.SetupLicenseServer(ls_urls, ls_timeout, ls_types, ls_msg), "SetupLicenseServer");
++
++            // note: you can do some "licensing fine tuning" by using explicit GetLicenseServerLicense (and LicenseServerFreeLicense) calls. If you
++            //       dont use it, then each call to a PDFEngine function will be automatically surrounded with an implicit call to LicenseServerGetLicense
++            //       and LicenseServerFreeLicense
++
++            // CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_used = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.None;
++            // RequireNoError(GetLicenseServerLicense(ls_timeout, ls_types, ref ls_used), "getting a license");
++            // RequireNoError(FreeLicenseServerLicense(), "freeing a license");
++
+             this.kc1 = kc1;
+             this.kc2 = kc2;
+             this.initialized=true;
