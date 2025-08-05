@@ -18,16 +18,16 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 # RUN apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
-# RUN apt-get install -y --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
+# RUN apt-get install -y --no-install-recommends libreoffice-nogui liblibreoffice-java default-jre-headless
 
-# note: please follow the instructions from README.md to prepare the callas_pdfaPilotCLI_Linux_14-0-392 directory ...
-COPY callas_pdfaPilotCLI_Linux_14-0-392 /opt/callas/callas_pdfaPilotCLI_Linux_14-0-392
+# note: please follow the instructions from README.md to prepare the callas_pdfaPilotCLI_Linux_14-1-396 directory ...
+COPY callas_pdfaPilotCLI_Linux_14-1-396 /opt/callas/callas_pdfaPilotCLI_Linux_14-1-396
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-0-392 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-0-392 cli
+RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-1-396 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-1-396 cli
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-0-392
+WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-1-396
 
