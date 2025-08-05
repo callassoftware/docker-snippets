@@ -22,13 +22,13 @@ mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 
 ```bash
 cd callas_pdfEngineSDK_16-1-662/sample-C
-patch -p0 < ../../pdfToolboxSample.cpp.patch
+patch -p0 < ../../sample-C.patch
 cd unix
 gmake
 ```
 
 > **Troubleshooting 1:**  
-pdfEngine-SDK has been compiled using gcc-9.5. If you able to compile the sample application but then receive a runtime error like this
+pdfEngine-SDK has been compiled using gcc-9.5. If compiling the sample application succeeds but fails with a runtime error like this
 
 ```
 ./pdfToolboxSample
@@ -101,10 +101,19 @@ The `ignore` value in the example command simply represents placeholder keycode.
 
 
 ### modifying sample-DotNetCore to use Callas License Servers via environment variables
-as a showcase the sample-C application has been modified to allow the usage of callas license servers. But the same is also possible for DotNet application:
+as a showcase the sample-C application has been modified to allow the usage of callas license servers. But the same is also possible for DotNet applications:
 
 ```bash
 cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-DotNetCore
 patch -p0 < ../../sample-DotNetCore.patch
 gmake
+```
+
+### modifying sample-DotNetCore to use Callas License Servers via environment variables
+as a showcase the sample-C application has been modified to allow the usage of callas license servers. But the same is also possible for Java applications:
+
+```bash
+cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-java
+patch -p0 < ../../sample-java.patch
+buildme.sh
 ```
