@@ -8,7 +8,7 @@ To demonstrate how to containerize a typical use case, this repository provides 
 > **Note:** the C sample modification is only needed for the case when a license server is to be used. It is not needed for OEM licensing
 ---
 
-## Step 1: Download and Unpack the SDK
+## Download and Unpack the SDK
 
 ```bash
 wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
@@ -18,7 +18,7 @@ mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 
 ---
 
-## Step 2: Patch and Rebuild the Sample Application to use a callas license server
+## Patch and Rebuild the Sample Application to use a callas license server
 
 ```bash
 cd callas_pdfEngineSDK_16-1-662/sample-C
@@ -58,7 +58,7 @@ ln -s libstdc++.so.6 libstdc++.so
 
 ---
 
-## Step 3: Build the Docker Image
+## Build the Docker Image
 
 ```bash
 docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
@@ -66,7 +66,7 @@ docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 
 ---
 
-## Step 4: Run the Docker Container
+## Run the Docker Container
 
 You can now run the image to test an example operation, such as text extraction from a PDF:
 
@@ -74,7 +74,7 @@ You can now run the image to test an example operation, such as text extraction 
 docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
                       -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
                       callassoftware/pdfengine:v16-1-662  \
-                      ./pdfToolboxSample ignore ignore --extracttext sample.pdf sample.txt
+                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
 ```
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
@@ -83,9 +83,9 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ## Notes
 
-### 1. License Server Integration
+### License Server Integration
 
-Because Docker containers don't support local hardware-based license activations, you must use an OEM license or a  **Callas License Servers** via environment variables:
+Because Docker containers don't support local hardware-based license activations, you must use an OEM license or **Callas License Servers** via environment variables:
 
 > **Note:** the C sample modification only works for the case when a license server is to be used. It is not needed (and not working) for OEM licensing
 
@@ -93,8 +93,18 @@ Because Docker containers don't support local hardware-based license activations
   One or more license server IPs or hostnames, separated by semicolons.
 
 - `CALLAS_LICENSESERVER_MSG`:  
-  An optional wallet ID required by **cloud-based** license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
+  An optional wallet ID required by **cloud-based** callas license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
 
-### 2. Placeholder Keycodes
+### Placeholder Keycodes
 
-The two `ignore` values in the example command represent placeholder keycodes. These are normally required when running the unmodified sample app locally but are ignored in this Docker-based setup. You can use any arbitrary strings in their place.
+The `ignore` value in the example command simply represents placeholder keycode. These are normally required when running the unmodified sample app locally but are ignored in this Docker-based setup. You can use any arbitrary string in its place.
+
+
+### modifying sample-DotNetCore to use Callas License Servers via environment variables
+as a showcase the sample-C application has been modified to allow the usage of callas license servers. But the same is also possible for DotNet application:
+
+```bash
+cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-DotNetCore
+patch -p0 < ../../sample-DotNetCore.patch
+gmake
+```
