@@ -67,7 +67,7 @@ docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
-**Note:** The `ignore` value in the example command simply represents a placeholder keycode. You can use any arbitrary string in its place.  These are normally required when running the unmodified sample app locally but are ignored in this Docker-based setup. 
+**Note:** The `ignore` value in the example command simply represents a placeholder keycode. You can use any arbitrary string in its place.  These are normally required when running the unmodified sample app locally but are ignored for the modified samples programs. 
 
 ### Patch and Rebuild the Sample-C Application to use a callas license server
 
