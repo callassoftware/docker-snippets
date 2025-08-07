@@ -55,7 +55,8 @@ throughout these samples there are two environment variables used:
   One or more license server IPs or hostnames, separated by semicolons.
 
 - `CALLAS_LICENSESERVER_MSG`:  
-  An optional wallet ID required by **cloud-based** callas license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
+  This is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs. For **on-premise** callas license server setups, this is not needed. But for **cloud-based** callas license servers it is mandatory.
+
 
 usage examples ...
 ```bash
