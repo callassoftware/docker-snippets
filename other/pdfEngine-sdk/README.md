@@ -10,7 +10,8 @@ To demonstrate how to containerize the sample-C/pdfToolbox application, this rep
 ## Download and Unpack the SDK
 
 ```bash
-wget https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
+# curl -LO https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_arm64_Linux_16-1-662.tar.gz
+curl -LO https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
 tar xvpf callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
 mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 ```
