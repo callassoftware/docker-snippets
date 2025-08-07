@@ -30,10 +30,8 @@ docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 You can now run the image to test an example operation, such as text extraction from a PDF:
 
 ```bash
-docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
-                      -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
-                      callassoftware/pdfengine:v16-1-662  \
-                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
+docker run --rm -ti callassoftware/pdfengine:v16-1-662  \
+                      ./pdfToolboxSample <your oem license code>  --extracttext sample.pdf sample.txt
 ```
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
@@ -57,6 +55,16 @@ throughout these samples there are two environment variables used:
 
 - `CALLAS_LICENSESERVER_MSG`:  
   An optional wallet ID required by **cloud-based** callas license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
+
+usage example ...
+```bash
+docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
+                      -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
+                      callassoftware/pdfengine:v16-1-662  \
+                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
+```
+
+This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
 ### Placeholder Keycodes
 
