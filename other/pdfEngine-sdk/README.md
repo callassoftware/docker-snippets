@@ -43,7 +43,7 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ### License Server Integration
 
-Because Docker containers don't support local hardware-based license activations, you must either use an OEM license or a **Callas License Server**
+Inside Docker containers you must either use an OEM license or a **Callas License Server**
 
 below you will find some instructions howto modify the sample programs to use a callas license server
  
@@ -57,8 +57,15 @@ throughout these samples there are two environment variables used:
 - `CALLAS_LICENSESERVER_MSG`:  
   An optional wallet ID required by **cloud-based** callas license servers. For **on-premise** setups, this is typically optional (it is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs)
 
-usage example ...
+usage examples ...
 ```bash
+
+docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
+                      callassoftware/pdfengine:v16-1-662  \
+                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
+
+
+# ... with an --lsmessage aequivalent ...
 docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
                       -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
                       callassoftware/pdfengine:v16-1-662  \
@@ -67,7 +74,7 @@ docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
-**Note:** The `ignore` value in the example command simply represents a placeholder keycode. You can use any arbitrary string in its place.  These are normally required when running the unmodified sample app locally but are ignored for the modified samples programs. 
+**Note:** The `ignore` value in the example command simply represents a keycode dummy placeholder. Such a keycode is normally required when running the unmodified sample app, but it is ignored for the modified samples programs. You can use any arbitrary string in its place. 
 
 ### Patch and Rebuild the Sample-C Application to use a callas license server
 
