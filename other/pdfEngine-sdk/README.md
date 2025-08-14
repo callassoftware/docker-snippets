@@ -58,7 +58,7 @@ throughout these samples there are two 'special' url schemes used in the first a
 - `lsm`:  
   This is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs. For **on-premise** callas license server setups, this is not needed. But for **cloud-based** callas license servers it is mandatory.
 
-	example: 'lsm://YjcxY2FmYTgtMzhkNC00NWZiL'
+	example: 'lsm://fa043a4a-9152-b8f9-03f05a961da0'
 
 
 usage examples ...
