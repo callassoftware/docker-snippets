@@ -53,7 +53,7 @@ throughout these samples there are two 'special' url schemes used in the first a
 - `lss:`:  
   One or more license server IPs or hostnames, separated by semicolons. Please note that this needs to be quoted if multiple servers are specified because otherwise the shell would interpret the ';' as a command separator
 
-	example: e.g. 'lss://10.0.0.64;10.0.0.37'
+	example: 'lss://10.0.0.64;10.0.0.37'
 
 - `lsm`:  
   This is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs. For **on-premise** callas license server setups, this is not needed. But for **cloud-based** callas license servers it is mandatory.
