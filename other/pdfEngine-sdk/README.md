@@ -45,7 +45,7 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 Inside Docker containers you must either use an OEM license or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
 
-below you will find some instructions howto modify the sample programs to use a callas license server
+below you will find some instructions howto modify the sample programs to use a callas license server (see "apply patches")
  
 
 throughout these samples there are two 'special' url schemes used in the first and optionally the second sample parameters:
@@ -62,18 +62,19 @@ throughout these samples there are two 'special' url schemes used in the first a
 
 
 usage examples ...
+
+This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 ```bash
+docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 --extracttext sample.pdf sample.txt
 
-docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.37' --extracttext sample.pdf sample.txt
-
+# ... with a list of license servers ...
+docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.73' --extracttext sample.pdf sample.txt
 
 # ... with an optional lsm argument (aka an --lsmessage aequivalent) ...
-
-docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.37' 'lsm://YjcxY2FmYTgtMzhkNC00NWZiL' --extracttext sample.pdf sample.txt
+docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 lsm://91cba468-7192-41e0-ad70-8510c0a5b1 --extracttext sample.pdf sample.txt
 
 ```
 
-This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
 ### apply patches ...
 
