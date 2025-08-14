@@ -3,7 +3,7 @@
 
 > **Note:** for `pdfToolbox`, `pdfaPilot`, or `pdfChip` there are "ready-to-use" [Docker images](https://hub.docker.com/u/callassoftware) on Docker hub. 
 
-But there is no such aequivalent for the *PDFEngine SDK* on Docker Hub. This is because the PDFEngine SDK is not a standalone application, but a Software Development Kit intended for building custom applications.
+But there is no such aequivalent for the *PDFEngine SDK* on Docker Hub. This is because it is not a standalone application, but a Software Development Kit intended for building custom applications.
 
 This repository contains an example *Dockerfile* that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
 
