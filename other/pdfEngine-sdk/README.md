@@ -47,41 +47,48 @@ Inside Docker containers you must either use an OEM license or a **Callas Licens
 
 below you will find some instructions howto modify the sample programs to use a callas license server
  
-> **Note:** these sample modifications only works for the case when a license server is to be used. It is not needed (and not working) for OEM licensing
 
-throughout these samples there are two environment variables used:
+throughout these samples there are two 'special' url schemes used in the first and optionally the second sample parameters:
 
-- `CALLAS_LICENSESERVER_URLS`:  
-  One or more license server IPs or hostnames, separated by semicolons.
+- `lss:`:  
+  One or more license server IPs or hostnames, separated by semicolons. Please note that this needs to be quoted if multiple servers are specified because otherwise the shell would interpret the ';' as a command separator
 
-- `CALLAS_LICENSESERVER_MSG`:  
+	example: e.g. 'lss://10.0.0.64;10.0.0.37'
+
+- `lsm`:  
   This is the aequivalent of the --lsmessage CLI argument for pdfToolbox, pdfaPilot and pdfChip CLIs. For **on-premise** callas license server setups, this is not needed. But for **cloud-based** callas license servers it is mandatory.
+
+	example: 'lsm://YjcxY2FmYTgtMzhkNC00NWZiL'
 
 
 usage examples ...
 ```bash
 
-docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
-                      callassoftware/pdfengine:v16-1-662  \
-                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
+docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.37' --extracttext sample.pdf sample.txt
 
 
-# ... with an --lsmessage aequivalent ...
-docker run --rm -ti   -e 'CALLAS_LICENSESERVER_URLS=10.0.0.64;10.0.0.37' \
-                      -e 'CALLAS_LICENSESERVER_MSG=retpifdghsetrwerrwh'   \
-                      callassoftware/pdfengine:v16-1-662  \
-                      ./pdfToolboxSample ignore --extracttext sample.pdf sample.txt
+# ... with an optional lsm argument (aka an --lsmessage aequivalent) ...
+
+docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.37' 'lsm://YjcxY2FmYTgtMzhkNC00NWZiL' --extracttext sample.pdf sample.txt
+
 ```
 
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
-**Note:** The `ignore` value in the example command simply represents a keycode dummy placeholder. Such a keycode is normally required when running the unmodified sample app, but it is ignored for the modified samples programs. You can use any arbitrary string in its place. 
+### apply patches ...
 
-### Patch and Rebuild the Sample-C Application to use a callas license server
+note: these patches will no longer needed with newer releases of the callas pdfEngine SDK (but for v16-1-662 its needed)
+```
+cd callas_pdfEngineSDK_16-1-662
+patch -p1 < pdfEngine-include.patch
+patch -p1 < pdfEngine-samples.patch
+ 
+```
+
+### rebuild the Sample-C application to use a callas license server
 
 ```bash
 cd callas_pdfEngineSDK_16-1-662/sample-C
-patch -p0 < ../../sample-C.patch
 cd unix
 gmake
 ```
@@ -115,18 +122,16 @@ cd lib
 ln -s libstdc++.so.6 libstdc++.so
 ```
 
-### Patch and Rebuild the sample-DotNetCore Application to use a callas license server
+### rebuild the sample-DotNetCore application to use a callas license server
 
 ```bash
 cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-DotNetCore
-patch -p0 < ../../sample-DotNetCore.patch
 gmake
 ```
 
-### Patch and Rebuild the sample-java Application to use a callas license server
+### rebuild the sample-java application to use a callas license server
 
 ```bash
 cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-java
-patch -p0 < ../../sample-java.patch
 buildme.sh
 ```

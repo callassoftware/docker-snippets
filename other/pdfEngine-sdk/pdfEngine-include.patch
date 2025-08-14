@@ -1,0 +1,45 @@
+diff -r -u orig/include/ptbLib.hpp new/include/ptbLib.hpp
+--- orig/include/ptbLib.hpp	2025-07-31 07:56:16.000000000 +0200
++++ new/include/ptbLib.hpp	2025-08-12 08:30:17.052596007 +0200
+@@ -97,6 +97,7 @@
+ 	              , const Version&     expected = Version()  /*!< Expected callas pdfEngine SDK version \note If set, attempting to initialize an incompatible library will result in an exception thrown. */
+ 	              );
+ 
++	 LibInitializer() : LibInitializer("", "", PTB::Path_t(), Version()) {}; // param less constructor (to be used together with a callas license server setup)
+ 	/*!
+ 	** \brief  Destructor
+ 	** 
+@@ -190,8 +191,9 @@
+                               , const Version&     expected )
+ {
+ 	throwIfError( checkVersion_(expected) );
+-	throwIfError( PTB_LibInit( keycode.c_str()
+-	                         , keycode.c_str()
++	auto keycode_c = keycode.empty() ? NULL : keycode.c_str();
++	throwIfError( PTB_LibInit( keycode_c
++	                         , keycode_c
+ 	                         , NULL ) );
+ }
+ 
+@@ -202,8 +204,8 @@
+                               , const Version&     expected )
+ {
+ 	throwIfError( checkVersion_(expected) );
+-	throwIfError( PTB_LibInit( keycode.c_str()
+-	                         , keycodeAddOn.c_str()
++	throwIfError( PTB_LibInit( keycode.empty() ? NULL : keycode.c_str()
++	                         , keycodeAddOn.empty() ? NULL : keycode.c_str()
+ 	                         , libPath.empty() ? NULL : libPath.c_str() ) );
+ }
+ 
+@@ -215,8 +217,8 @@
+                               , const Version&     expected )
+ {
+ 	throwIfError( checkVersion_(expected) );
+-	throwIfError( PTB_LibInit2( keycode.c_str()
+-	                          , keycodeAddOn.c_str()
++	throwIfError( PTB_LibInit2( keycode.empty() ? NULL : keycode.c_str()
++	                          , keycodeAddOn.empty() ? NULL : keycode.c_str()
+ 	                          , libPath.empty() ? NULL : libPath.c_str()
+ 	                          , lang.c_str() ) );
+ }

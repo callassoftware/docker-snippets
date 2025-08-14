@@ -1,0 +1,673 @@
+diff -r -u orig/sample-C/pdfToolboxSample.cpp new/sample-C/pdfToolboxSample.cpp
+--- orig/sample-C/pdfToolboxSample.cpp	2025-07-31 07:56:16.000000000 +0200
++++ new/sample-C/pdfToolboxSample.cpp	2025-08-12 08:30:17.040595632 +0200
+@@ -174,6 +174,39 @@
+ }
+ 
+ ////////////////////////////////////////////////////////////////////////////////
++/*
++  tokenize a licenseserver url spec into an array, e.g.: "lss://10.0.0.64;10.0.0.32" --> ["10.0.0.64", "10.0.0.32"]
++*/
++std::vector<const PTB_utf8_char_t*> tokenize_licenseserver_urls(const char *s) {
++	std::vector<const PTB_utf8_char_t*> tokens;
++	if (!s) return tokens;
++	if (std::string(s).find("lss://") != 0) return tokens;
++
++	char* tmp = strdup(s+6);  // allocates memory (must be freed by the caller)
++	if (!tmp) return tokens;
++
++	const char delimiter(';');
++	char* token = tmp;
++	char* pos = tmp;
++
++	while (*pos) {
++		if (*pos == delimiter) {
++			*pos = '\0';
++			tokens.push_back((const PTB_utf8_char_t*)token);
++			token = pos + 1;
++		}
++		pos++;
++	}
++	tokens.push_back((const PTB_utf8_char_t*)token);    // add the last token
++
++	// for (const PTB_utf8_char_t* token : tokens) {
++	//	std::cerr << "tokenized_licenseserver_url '" << token << "'" <<  std::endl;
++	// }
++
++	return tokens;
++}
++
++////////////////////////////////////////////////////////////////////////////////
+ std::string makeFileName( std::string s )
+ {
+ 	const std::string kForbiddenChars(" :/\\*?");
+@@ -285,7 +318,23 @@
+ 		void init( const std::string& keycode, const std::string& keycodeAddOn )
+ 		{
+ 			if( !initialized_ ) {
+-				require_noErr( PTB_LibInit( keycode.c_str(), keycodeAddOn.c_str(), NULL ), true, false );
++
++				std::vector<const PTB_utf8_char_t*> ls_urls = tokenize_licenseserver_urls(keycode.c_str());
++				if (ls_urls.size() == 0) {
++					require_noErr( PTB_LibInit( keycode.c_str(), keycodeAddOn.c_str(), NULL ), true, false );
++				} else {
++					require_noErr( PTB_LibInit( NULL, NULL, NULL ), true, false );
++					PTB_uint32_t ls_timeout(5);
++					const PTB_utf8_char_t *ls_message=NULL;
++					if (std::string(keycodeAddOn).find("lsm://") == 0) {
++						ls_message = reinterpret_cast<const PTB_utf8_char_t *>(keycodeAddOn.c_str() + 6);
++						// std::cout << "ls_message: '" << ls_message << "'" << std::endl;
++					}
++					PTB_ELicenseServerType ls_types(static_cast<PTB_ELicenseServerType> (PTB_eelstRuncount|PTB_eelstCredits));
++					require_noErr( PTB_LicenseServerSetup2( &ls_urls[0], ls_urls.size(), ls_timeout, ls_types, ls_message ), true, false);
++					// note: you can also do some "licensing fine tuning" by using explicit calls to PTB_LicenseServerGetLicense and PTB_LicenseServerFreeLicense
++					free(const_cast<PTB_utf8_char_t *>(ls_urls[0]));
++				}
+ 				log( "callas pdfEngine SDK initialized" );
+ 				initialized_ = true;
+ 			}
+@@ -3133,11 +3182,16 @@
+ 		TArgumentVec args;
+ 		for( std::size_t i = 0; i < argc; ++i)
+ 		{
+-			// The second keycode argument (for DeviceLink addon) is optional now
++			// The second keycode argument (aka the former DeviceLink addon) is optional now
+ 			if( i == 2 ) {
+ 				std::string tmp( argv[i] );
+-				if( (args.at(1) != tmp) && (tmp.size() != 24) && (tmp.size() != 44) ) {
+-					args.push_back( args.at(1) );
++
++				if (tmp.find("lsm://") != 0) {
++					// its not a license server message ...
++
++					if( (args.at(1) != tmp) && (tmp.size() != 24) && (tmp.size() != 44) ) {
++						args.push_back( args.at(1) );
++					}
+ 				}
+ 			}
+ #if defined(_WIN32) || defined(_M_X64)
+diff -r -u orig/sample-C++/pdfToolboxC++Sample.cpp new/sample-C++/pdfToolboxC++Sample.cpp
+--- orig/sample-C++/pdfToolboxC++Sample.cpp	2025-07-31 07:56:16.000000000 +0200
++++ new/sample-C++/pdfToolboxC++Sample.cpp	2025-08-12 08:30:17.036595508 +0200
+@@ -92,6 +92,9 @@
+                                              , &x64
+                                              , &arm64
+                                              , &threadSafety);
++	if (err != PTB_eerrNone) {
++		throw std::runtime_error("PTB_LibAPIGetVersion3 - failed to retrieve API version information");
++	}
+         std::string arch_info("");
+         if(arm64) arch_info += "arm64";
+         else if (x64) arch_info += "x64";
+@@ -2011,6 +2014,39 @@
+ 	}
+ 	std::cout << "DONE" << std::endl;
+ }
++
++////////////////////////////////////////////////////////////////////////////////
++//  tokenize a licenseserver url spec into an array, e.g.: "lss://10.0.0.64;10.0.0.32" --> ["10.0.0.64", "10.0.0.32"]
++PTB::LibLicenseServer::AddressList tokenize_licenseserver_urls(const char *s) {
++        PTB::LibLicenseServer::AddressList tokens;
++        if (!s) return tokens;
++        if (std::string(s).find("lss://") != 0) return tokens;
++
++        char* tmp = strdup(s+6);  // allocates memory (must be freed by the caller)
++        if (!tmp) return tokens;
++
++        const char delimiter(';');
++        char* token = tmp;
++        char* pos = tmp;
++
++        while (*pos) {
++                if (*pos == delimiter) {
++                        *pos = '\0';
++                        tokens.push_back((const PTB_utf8_char_t*)token);
++                        token = pos + 1;
++                }
++                pos++;
++        }
++        tokens.push_back((const PTB_utf8_char_t*)token);    // add the last token
++
++        // for (const PTB_utf8_char_t* token : tokens) {
++        //      std::cerr << "tokenized_licenseserver_url '" << token << "'" <<  std::endl;
++        // }
++
++        return tokens;
++}
++
++
+ ////////////////////////////////////////////////////////////////////////////////
+ int main( int argc, char* argv[] )
+ {
+@@ -2019,13 +2055,18 @@
+ 		printVersion();
+ 
+ 		TArgumentVec args;
+-		for( std::size_t i = 0; i < argc; ++i)
++		for( int i = 0; i < argc; ++i)
+ 		{
+-			// The second keycode argument (for DeviceLink addon) is optional now
++			// The second keycode argument (aka the former DeviceLink addon) is optional now
+ 			if( i == 2 ) {
+ 				std::string tmp( argv[i] );
+-				if( args.at(1) != tmp && tmp.size() != 24 ) {
+-					args.push_back( args.at(1) );
++
++				if (tmp.find("lsm://") != 0) {
++					// its not a license server message ...
++
++					if( (args.at(1) != tmp) && (tmp.size() != 24) && (tmp.size() != 44) ) {
++						args.push_back( args.at(1) );
++					}
+ 				}
+ 			}
+ 			args.push_back( argv[i] );
+@@ -2037,9 +2078,24 @@
+ 			usage();
+ 			return EXIT_WITH_FAILURE;
+ 		}
++		const auto &ls_urls = tokenize_licenseserver_urls(args.at( 1 ).c_str());
++		if (ls_urls.size() == 0) {
++			std::cout << "using local licensing ..." << std::endl;
++			PTB::LibInitializer libInitializer( args.at( 1 ) , args.at( 2 ));
++			samples( args );
++		} else {
++			std::cout << "using remote licensing ..." << std::endl;
+ 
+-		PTB::LibInitializer libInitializer( args.at( 1 ) , args.at( 2 ));
+-		samples( args );
++			PTB_uint32_t ls_timeout(5);
++			PTB_uint32_t ls_types(3); // bitweise combination of PTB_eelstRuncount and PTB_eelstCredits
++			std::string keycode2(args.at( 2 ));
++			if (keycode2.find("lsm://") == 0) keycode2 = args.at( 2 ).substr(6);
++			
++			const auto &ls_message(PTB::string_cast<PTB::UTF8_str_t>(keycode2));
++			PTB::LibInitializer libInitializer;
++			PTB::LibLicenseServer licenseServer( ls_urls, ls_timeout, ls_types, ls_message);
++			samples( args );
++		}
+ 
+ 		return 0;
+ 	} catch( const std::out_of_range& ) {
+ 
+diff -r -u orig/sample-DotNetCore/src/common/Init.cs new/sample-DotNetCore/src/common/Init.cs
+--- orig/sample-DotNetCore/src/common/Init.cs	2025-07-09 16:25:04.000000000 +0200
++++ new/sample-DotNetCore/src/common/Init.cs	2025-08-12 17:23:08.000000000 +0200
+@@ -1,8 +1,4 @@
+ using System;
+-using System.Collections.Generic;
+-using System.Threading;
+-using System.Text;
+-using CallasSoftware.PDFEngineCore;
+ using static CallasSoftware.PDFEngineCore.CLib;
+ 
+ namespace CallasSoftware.DotNetCore.Sample
+@@ -22,12 +18,42 @@
+             // RequireNoError(CLib.SetLibraryPath(CLib.EPathType.Temp, "/tmp/myowntemp"));
+             // RequireNoError(CLib.SetLibraryPath(CLib.EPathType.Cache, "/tmp/myowncache"));
+ 
+-            RequireNoError(InitializeLibrary(kc1, kc2==null ? kc1 : kc2, "en"),  "initialize");
++            // RequireNoError(InitializeLibrary(kc1, kc2==null ? kc1 : kc2, "en"),  "initialize");
++
++            if (!kc1.StartsWith("lss://"))
++            {
++                RequireNoError(InitializeLibrary(kc1, kc2 == null ? kc1 : kc2, "en"), "initialize");
++            }
++            else
++            {
++                // note: use keycodes with a value of 'null' to use a callas license server
++                RequireNoError(InitializeLibrary(null, null, "en"), "initialize");
++
++                string[] ls_urls = kc1.Substring(6).Split(new string[] { ";" }, StringSplitOptions.None);
++                string ls_msg = kc2;
++                if (!string.IsNullOrEmpty(ls_msg) && ls_msg.StartsWith("lsm://"))
++                {
++                    ls_msg = ls_msg.Substring(6);
++                }
++                uint ls_timeout = 5;
++                CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_types = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Runcount | CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Credits;
++
++                RequireNoError(CallasSoftware.PDFEngineCore.CLib.SetupLicenseServer(ls_urls, ls_timeout, ls_types, ls_msg), "SetupLicenseServer");
++
++                // note: you can do some "licensing fine tuning" by using explicit GetLicenseServerLicense (and LicenseServerFreeLicense) calls. If you
++                //       dont use it, then each call to a PDFEngine function will be automatically surrounded with an implicit call to LicenseServerGetLicense
++                //       and LicenseServerFreeLicense
++
++                // CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_used = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.None;
++                // RequireNoError(GetLicenseServerLicense(ls_timeout, ls_types, ref ls_used), "getting a license");
++                // RequireNoError(FreeLicenseServerLicense(), "freeing a license");
++
++            }
+             this.kc1 = kc1;
+             this.kc2 = kc2;
+-            this.initialized=true;
++            this.initialized = true;
+         }
+-        
++
+         /// <summary>
+         /// release the callas pdfEngine library. This is needed to avoid undefined behavior on program termination
+         /// </summary>
+@@ -38,7 +64,7 @@
+ 
+         private String kc1;
+         private String kc2;
+-        private Boolean initialized=false;
++        private Boolean initialized = false;
+     }
+ }
+ 
+diff -r -u orig/sample-DotNetCore/src/pdfaPilotSample/DoPDFA/PDFAMultiThreaded.cs new/sample-DotNetCore/src/pdfaPilotSample/DoPDFA/PDFAMultiThreaded.cs
+--- orig/sample-DotNetCore/src/pdfaPilotSample/DoPDFA/PDFAMultiThreaded.cs	2025-07-09 16:25:04.000000000 +0200
++++ new/sample-DotNetCore/src/pdfaPilotSample/DoPDFA/PDFAMultiThreaded.cs	2025-08-12 17:23:08.000000000 +0200
+@@ -1,8 +1,6 @@
+ using System;
+ using System.Collections.Generic;
+ using System.Threading;
+-using System.Text;
+-using CallasSoftware.PDFEngineCore;
+ using static CallasSoftware.PDFEngineCore.CLib;
+ 
+ namespace CallasSoftware.DotNetCore.Sample
+@@ -25,9 +23,31 @@
+             {
+                 var me = Thread.CurrentThread.Name + " ";
+                 if (dcfg.show_processing_details) Console.WriteLine(me + "initializing ...");
+-                var rc = InitializeLibrary(kc1, kc2 == null ? kc1 : kc2, "en");
+-                if (EError.None != rc)
++                var rc = EError.None;
++                if (!kc1.StartsWith("lss://"))
+                 {
++                    rc = InitializeLibrary(kc1, kc2 == null ? kc1 : kc2, "en");
++                }
++                else
++                {
++                    rc = InitializeLibrary(null, null, "en");
++
++                    if (EError.None == rc)
++                    {
++                        string[] ls_urls = kc1.Substring(6).Split(new string[] { ";" }, StringSplitOptions.None);
++                        string ls_msg = kc2;
++                        if (!string.IsNullOrEmpty(ls_msg) && ls_msg.StartsWith("lsm://"))
++                        {
++                            ls_msg = ls_msg.Substring(6);
++                        }
++                        uint ls_timeout = 5;
++                        CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_types = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Runcount | CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Credits;
++
++                        RequireNoError(CallasSoftware.PDFEngineCore.CLib.SetupLicenseServer(ls_urls, ls_timeout, ls_types, ls_msg), "SetupLicenseServer");
++                    }
++
++                }
++                if (EError.None != rc) {
+                     Console.WriteLine(me + "initialization failed with " + rc);
+                     return;
+                 }
+diff -r -u orig/sample-DotNetCore/src/pdfaPilotSample/Main.cs new/sample-DotNetCore/src/pdfaPilotSample/Main.cs
+--- orig/sample-DotNetCore/src/pdfaPilotSample/Main.cs	2025-07-09 16:25:04.000000000 +0200
++++ new/sample-DotNetCore/src/pdfaPilotSample/Main.cs	2025-08-12 17:23:08.000000000 +0200
+@@ -1,8 +1,5 @@
+ using System;
+ using System.Collections.Generic;
+-using System.Threading;
+-using System.Text;
+-using CallasSoftware.PDFEngineCore;
+ 
+ namespace CallasSoftware.DotNetCore.Sample
+ {
+@@ -24,11 +21,15 @@
+             string kc1 = args[0];
+             string kc2 = args[1];
+ 
+-            if (kc2.StartsWith("--")) kc2=null;
+-            else if (kc2.Contains('.')) kc2=null;
+-            else if (!(kc2.Length==24) || (kc2.Length==44))  kc2=null;
++            // the second keycode argument (aka the former DeviceLink addon argument) is optional now
++            if (args[1].StartsWith("--")) kc2 = null;
++            else if (args[1].Contains('.')) kc2 = null; // e.g. a something.kfpx ...
++            else if (!args[1].StartsWith("lsm://"))
++            { // its not a license server message ...
++                if (!(args[1].Length == 24) || (args[1].Length == 44)) kc2 = null;
++            }
+ 
+-            var sidx= kc2 == null ? 1 : 2; 
++            var sidx= args[1] == null ? 1 : 2;
+ 
+             if (n < (sidx+1))
+             {
+@@ -94,4 +95,5 @@
+ 
+         } // Main
+     } // partial class program
+-} // namespace CallasSoftware.DotNetCore.Sample
+\ No newline at end of file
++} // namespace CallasSoftware.DotNetCore.Sample
++
+diff -r -u orig/sample-DotNetCore/src/pdfToolboxSample/DoPreflight/PreflightMultiThreaded.cs new/sample-DotNetCore/src/pdfToolboxSample/DoPreflight/PreflightMultiThreaded.cs
+--- orig/sample-DotNetCore/src/pdfToolboxSample/DoPreflight/PreflightMultiThreaded.cs	2025-07-09 16:25:04.000000000 +0200
++++ new/sample-DotNetCore/src/pdfToolboxSample/DoPreflight/PreflightMultiThreaded.cs	2025-08-12 17:23:08.000000000 +0200
+@@ -2,7 +2,6 @@
+ using System.IO;
+ using System.Collections.Generic;
+ using System.Threading;
+-using CallasSoftware.PDFEngineCore;
+ using static CallasSoftware.PDFEngineCore.CLib;
+ 
+ namespace CallasSoftware.DotNetCore.Sample
+@@ -29,7 +28,30 @@
+             public void Run()
+             {
+                 var me = Thread.CurrentThread.Name + " ";
+-                var rc = InitializeLibrary(kc1, kc2 == null ? kc1 : kc2, "en");
++                var rc = EError.None;
++                if (!kc1.StartsWith("lss://"))
++                {
++                    rc = InitializeLibrary(kc1, kc2 == null ? kc1 : kc2, "en");
++                }
++                else
++                {
++                    rc = InitializeLibrary(null, null, "en");
++
++                    if (EError.None == rc)
++                    {
++                        string[] ls_urls = kc1.Substring(6).Split(new string[] { ";" }, StringSplitOptions.None);
++                        string ls_msg = kc2;
++                        if (!string.IsNullOrEmpty(ls_msg) && ls_msg.StartsWith("lsm://"))
++                        {
++                            ls_msg = ls_msg.Substring(6);
++                        }
++                        uint ls_timeout = 5;
++                        CallasSoftware.PDFEngineCore.CLib.ELicenseServerType ls_types = CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Runcount | CallasSoftware.PDFEngineCore.CLib.ELicenseServerType.Credits;
++
++                        RequireNoError(CallasSoftware.PDFEngineCore.CLib.SetupLicenseServer(ls_urls, ls_timeout, ls_types, ls_msg), "SetupLicenseServer");
++                    }
++
++                }
+                 if (EError.None != rc)
+                 {
+                     Console.WriteLine(me + "failed with " + rc);
+diff -r -u orig/sample-DotNetCore/src/pdfToolboxSample/Main.cs new/sample-DotNetCore/src/pdfToolboxSample/Main.cs
+--- orig/sample-DotNetCore/src/pdfToolboxSample/Main.cs	2025-07-09 16:25:04.000000000 +0200
++++ new/sample-DotNetCore/src/pdfToolboxSample/Main.cs	2025-08-12 17:23:08.000000000 +0200
+@@ -1,8 +1,5 @@
+ using System;
+ using System.Collections.Generic;
+-using System.Threading;
+-using System.Text;
+-using CallasSoftware.PDFEngineCore;
+ 
+ namespace CallasSoftware.DotNetCore.Sample
+ {
+@@ -30,10 +27,12 @@
+             string kc1 = args[0];
+             string kc2 = args[1];
+ 
+-            if (kc2.StartsWith("--")) kc2=null;
+-            else if (kc2.Contains('.')) kc2=null;
+-            else if (!(kc2.Length==24) || (kc2.Length==44))  kc2=null;
+-
++            // the second keycode argument (aka the former DeviceLink addon argument) is optional now
++            if (kc2.StartsWith("--")) kc2 = null;
++            else if (kc2.Contains('.')) kc2 = null; // e.g. a something.kfpx ...
++            else if (!kc2.StartsWith("lsm://")) { // its not a license server message ...
++                if (!(kc2.Length == 24) || (kc2.Length == 44)) kc2 = null;
++            }
+             var sidx= kc2 == null ? 1 : 2; 
+ 
+             if (n < (sidx+1))
+diff -r -u orig/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSample.java new/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSample.java
+--- orig/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSample.java	2025-07-31 08:46:28.000000000 +0200
++++ new/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSample.java	2025-08-12 18:10:02.720952514 +0200
+@@ -34,11 +34,14 @@
+ 			Stack<String> args = new Stack<String>();
+ 			// print arguments
+ 			for( int i = 0 ; i < argv.length ; ++i) {
+-				// The second keycode argument (for DeviceLink addon) is optional now
++				// The second keycode argument (aka the former DeviceLink addon) is optional now
+ 				if( i == 1 ) {
+ 					String tmp = argv[i];
+-					if( (args.get(0) != tmp) && (tmp.length() != 24) && (tmp.length() != 44) ) {
+-						args.push( args.get(0) );
++
++					if (!tmp.startsWith("lsm://")) {
++						if( (args.get(0) != tmp) && (tmp.length() != 24) && (tmp.length() != 44) ) {
++							args.push( args.get(0) );
++						}
+ 					}
+ 				}
+ 				args.push( argv[i] );
+@@ -52,10 +55,25 @@
+ 			}
+ 
+ 			// init library
+-			lib.init( args.get(0), args.get(1), null, "en");
++			String keycode=args.get(0);
++			String keycodeAddOn=args.get(1);
++			if (!keycode.startsWith("lss://")) {
++				lib.init( keycode, keycodeAddOn, null, "en");
++			} else {
++				lib.init( null, null, null, "en");
++				keycode = keycode.substring(6);
++				String[] ls_urls = keycode.split(";");
++				String ls_msg = keycodeAddOn.substring(6);
++				int ls_timeout=5;
++				int ls_types=(int)LicenseServerType.RUNCOUNT | LicenseServerType.CREDITS;
++				lib.licenseServerSetup(ls_urls, ls_timeout, ls_types, ls_msg);
++			}
++
++
+ 			isInitialized = true;
+ 			System.out.println( "lib is initialized" );
+ 
++
+ 			// execute samples with args
+ 			lib.samples( args );
+ 		}
+Only in orig/thread_safe: ReadMe_SDK_Threadsafe.txt
+diff -r -u orig/thread_safe/sample-C/pdfToolboxSampleThreadSafe.cpp new/thread_safe/sample-C/pdfToolboxSampleThreadSafe.cpp
+--- orig/thread_safe/sample-C/pdfToolboxSampleThreadSafe.cpp	2025-07-31 07:56:16.000000000 +0200
++++ new/thread_safe/sample-C/pdfToolboxSampleThreadSafe.cpp	2025-08-12 15:01:51.000000000 +0200
+@@ -128,6 +128,7 @@
+ 	return ( fileAtt & FILE_ATTRIBUTE_DIRECTORY ) == 0; 
+ }
+ 
++
+ void scan_inputfolder(const std::string &inputfolder) {
+ 
+    WIN32_FIND_DATAA FileData; 
+@@ -184,6 +185,37 @@
+ #endif
+ 
+ 
++std::vector<const PTB_utf8_char_t*> tokenize_licenseserver_urls(const char *s) {
++
++	// tokenize a licenseserver url spec into an array, e.g.: "lss://10.0.0.64;10.0.0.32" --> ["10.0.0.64", "10.0.0.32"]
++
++	std::vector<const PTB_utf8_char_t*> tokens;
++	if (!s) return tokens;
++	if (std::string(s).find("lss://") != 0) return tokens;
++
++	char* tmp = strdup(s+6);  // allocates memory (must be freed by the caller)
++	if (!tmp) return tokens;
++
++	const char delimiter(';');
++	char* token = tmp;
++	char* pos = tmp;
++
++	while (*pos) {
++		if (*pos == delimiter) {
++			*pos = '\0';
++			tokens.push_back((const PTB_utf8_char_t*)token);
++			token = pos + 1;
++		}
++		pos++;
++	}
++	tokens.push_back((const PTB_utf8_char_t*)token);    // add the last token
++
++	// for (const PTB_utf8_char_t* token : tokens) {
++	//	std::cerr << "tokenized_licenseserver_url '" << token << "'" <<  std::endl;
++	// }
++
++	return tokens;
++}
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ /*! Write log statement to console
+@@ -927,6 +959,30 @@
+ 	if (PTB_INVALID_ID != idEng) PTB_PRCEngineDispose( idEng);
+ }
+ 
++
++void lib_init(const std::string &keycode, const std::string& keycodeAddOn) {
++	std::vector<const PTB_utf8_char_t*> ls_urls = tokenize_licenseserver_urls(keycode.c_str());
++	if (ls_urls.size() == 0) {
++		require_noErr( PTB_LibInit( keycode.c_str(), keycodeAddOn.c_str(), NULL ), true, false );
++	} else {
++		require_noErr( PTB_LibInit( NULL, NULL, NULL ), true, false );
++		PTB_uint32_t ls_timeout(5);
++		const PTB_utf8_char_t *ls_message=NULL;
++		if (std::string(keycodeAddOn).find("lsm://") == 0) {
++			ls_message = reinterpret_cast<const PTB_utf8_char_t *>(keycodeAddOn.c_str() + 6);
++			// std::cout << "ls_message: '" << ls_message << "'" << std::endl;
++		}
++		PTB_ELicenseServerType ls_types(static_cast<PTB_ELicenseServerType> (PTB_eelstRuncount|PTB_eelstCredits));
++		require_noErr( PTB_LicenseServerSetup2( &ls_urls[0], ls_urls.size(), ls_timeout, ls_types, ls_message ), true, false);
++		// note: you can also do some "licensing fine tuning" by using explicit calls to PTB_LicenseServerGetLicense and PTB_LicenseServerFreeLicense
++		free(const_cast<PTB_utf8_char_t *>(ls_urls[0]));
++	}
++}
++
++void lib_deinit() {
++	PTB_LibRelease();
++}
++
+ ////////////////////////////////////////////////////////////////////////////////
+ // main
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -957,11 +1013,14 @@
+ 		TArgumentVec args;
+ 		for( int i = 0; i < argc; ++i)
+ 		{
+-			// The second keycode argument (for DeviceLink addon) is optional
++			// The second keycode argument (aka the former DeviceLink addon) is optional now
+ 			if( i == 2 ) {
+ 				std::string tmp( argv[i] );
+-				if( args.at(1) != tmp && tmp.size() != 24 ) {
+-					args.push_back( args.at(1) );
++				if (tmp.find("lsm://") != 0) {
++					// its not a license server message ...
++					if( (args.at(1) != tmp) && (tmp.size() != 24) && (tmp.size() != 44) ) {
++						args.push_back( args.at(1) );
++					}
+ 				}
+ 			}
+ 			args.push_back( argv[i] );
+@@ -1007,7 +1066,7 @@
+ 
+ 		// "outer" init. not strictly needed but very useful to detect library initialization errors as soon as possible
+ 		std::cout << "main: initializing SDK ..." << std::endl;
+-		require_noErr( PTB_LibInit( args[1].c_str(), args[2].c_str(), 0), true, false ); 
++		lib_init(args[1], args[2]);
+ 
+ 		if (nInputfiles<nThreads) nThreads = nInputfiles;
+ 
+@@ -1018,10 +1077,10 @@
+ 		   threads.emplace_back([i, args, kfpxfile, inputfolder, outputfolder, report_wanted, flags]() {
+ 			try {
+ 				workerConsoleLog("initializing SDK ...");
+-				PTB_LibInit( args[1].c_str(), args[2].c_str(), 0); // inner SDK init					
++				lib_init(args[1], args[2]); // inner SDK init
+ 				work(kfpxfile, inputfolder, outputfolder, report_wanted, flags);
+ 				workerConsoleLog( "releasing SDK ..." );
+-				PTB_LibRelease();	// inner SDK de-init
++				lib_deinit();	// inner SDK de-init
+ 			} catch( const std::exception & x )	{
+ 				workerConsoleLog (std::string("exception catched: ") + x.what());
+ 			}
+@@ -1039,7 +1098,7 @@
+ 
+ 		// "outer" SDK de-init
+ 		std::cout << "main: releasing SDK ..." << std::endl;
+-		PTB_LibRelease();
++		lib_deinit();
+ 	}
+ 	catch( const std::out_of_range& ) 
+ 	{
+diff -r -u orig/thread_safe/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSampleThreadSafe.java new/thread_safe/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSampleThreadSafe.java
+--- orig/thread_safe/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSampleThreadSafe.java	2025-07-31 07:56:16.000000000 +0200
++++ new/thread_safe/sample-java/com/callassoftware/sample/pdfEngine/pdfToolboxSampleThreadSafe.java	2025-08-12 14:39:35.000000000 +0200
+@@ -1,6 +1,6 @@
+ package com.callassoftware.sample.pdfEngine;
+ 
+-import com.callassoftware.pdfEngine.Constants;
++import com.callassoftware.pdfEngine.Constants.LicenseServerType;
+ import com.callassoftware.pdfEngine.Constants.PreflightFlags;
+ import com.callassoftware.pdfEngine.DynParamID;
+ import com.callassoftware.pdfEngine.PDFEngine;
+@@ -12,7 +12,6 @@
+ import java.io.IOException;
+ import java.io.PrintStream;
+ import java.util.ArrayList;
+-import java.util.Stack;
+ 
+ public class pdfToolboxSampleThreadSafe {
+ 
+@@ -83,7 +82,19 @@
+ 
+     void init(final CommonConfig cfg_) throws PDFEngineException {
+         cfg = cfg_;
+-        lib.init(cfg.keycode1, cfg.keycode2, null, cfg.lang);
++
++        if (!cfg.keycode1.startsWith("lss://")) {
++            System.out.println("using local initialization ...");
++            lib.init(cfg.keycode1, cfg.keycode2, null, cfg.lang);
++        } else {
++            System.out.println("using a callas license server setup ...");
++            lib.init( null, null, null, "en");
++            String[] ls_urls = cfg.keycode1.substring(6).split(";");
++            String ls_msg = cfg.keycode2.substring(6);
++            int ls_timeout=5;
++            int ls_types=(int)LicenseServerType.RUNCOUNT | LicenseServerType.CREDITS;
++            lib.licenseServerSetup(ls_urls, ls_timeout, ls_types, ls_msg);
++        }
+         isInitialized = true;
+     }
+ 
+@@ -167,11 +178,15 @@
+         CommonConfig(final String[] args) throws IOException {
+             int idx = 0;
+             keycode1 = args[idx++];
+-            if ((!args[idx].equals(keycode1)) && (args[idx].length() != 24)) {
+-                keycode2 = keycode1;
++
++            String tmp = args[idx++];
++            if (tmp.equals(keycode1) || tmp.startsWith("lsm://") || tmp.length() == 24 || tmp.length() == 44) {
++                keycode2 = tmp;
+             } else {
+-                keycode2 = args[idx++];
++                keycode2 = keycode1;
++                idx--;
+             }
++
+             lang = "en";
+ 
+ 
+@@ -227,7 +242,17 @@
+ 
+             try {
+                 log("initializing pdfEngine SDK ...");
+-                super.init(cfg.keycode1, cfg.keycode2, null, cfg.lang);
++                if (!cfg.keycode1.startsWith("lss://")) {
++                    super.init(cfg.keycode1, cfg.keycode2, null, cfg.lang);
++                } else {
++                    super.init(null, null, null, "en");
++                    String[] ls_urls = cfg.keycode1.substring(6).split(";");
++                    String ls_msg = cfg.keycode2.substring(6);
++                    int ls_timeout = 5;
++                    int ls_types = (int) LicenseServerType.RUNCOUNT | LicenseServerType.CREDITS;
++                    super.licenseServerSetup(ls_urls, ls_timeout, ls_types, ls_msg);
++                }
++
+                 initialized = true;
+             } catch (PDFEngineException ex) {
+                 log("caught PDFEngineException " + ex.getMessage());
