@@ -5,7 +5,6 @@
 
 To demonstrate how to containerize the sample-C/pdfToolbox application, this repository provides an example Dockerfile.
 
-Visit [OpenAI](https://openai.com) for more information.
 ---
 
 ## Download and Unpack the SDK
