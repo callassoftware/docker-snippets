@@ -50,7 +50,7 @@ below you will find some instructions howto modify the sample programs to use a 
 
 throughout these samples there are two 'special' url schemes used in the first and optionally the second sample parameters:
 
-- `lss:`:  
+- `lss`:  
   One or more license server IPs or hostnames, separated by semicolons. Please note that this needs to be quoted if multiple servers are specified because otherwise the shell would interpret the ';' as a command separator
 
 	example: 'lss://10.0.0.64;10.0.0.37'
