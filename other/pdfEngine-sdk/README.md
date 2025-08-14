@@ -77,7 +77,7 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ### apply patches ...
 
-note: in the future (with versions newer then v16-1-662) these patches will be no longer needed, but as of writing this - for v16-1-662 - its needed
+note: in the future (with versions newer then v16-1-662) these patches will be no longer needed, but as of writing this its required if a callas license server is to be used
 ```
 cd callas_pdfEngineSDK_16-1-662
 patch -p1 < pdfEngine-include.patch
