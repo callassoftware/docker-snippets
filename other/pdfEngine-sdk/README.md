@@ -25,11 +25,11 @@ mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 ## Build the Docker Image
 
 The provided [Dockerfile-debian](Dockerfile-debian) can be used to create a new docker image tagged with *callassoftware/pdfengine:v16-1-662*.
+The new image uses /opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix as the default working directory to make it easier to call the sample-C application using a relative "./" directory
 
 ```bash
 docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 ```
-the new image uses /opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix as the default working directory to make it easier to call the sample-C application using a relative "./" directory
 ---
 
 ## Run the Docker Container
