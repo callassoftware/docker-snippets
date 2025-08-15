@@ -19,6 +19,7 @@ curl -LO https://www.callassoftware.com/extranet/callas_pdfEngineSDK/callas_pdfE
 tar xvpf callas_pdfEngineSDK_x64_Linux_16-1-662.tar.gz
 mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 ```
+note: please use `callas_pdfEngineSDK_arm64_Linux_16-1-662.tar.gz` for the **linux arm** variant
 
 ---
 
