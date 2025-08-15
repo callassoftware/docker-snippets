@@ -7,7 +7,7 @@ But there is no such aequivalent for the [callas PDFEngine SDK](https://help.cal
 
 This repository contains an example [Dockerfile-debian](Dockerfile-debian) that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
 
-While the example mainly focuses on `sample-C/pdfToolbox`, the same approach can be adapted for *any* application built with the Callas PDFEngine SDK.
+While the example mainly focuses on `sample-C/pdfToolbox` as a show case, the same approach can be adapted for *any* application built with the Callas PDFEngine SDK.
 
 ---
 
