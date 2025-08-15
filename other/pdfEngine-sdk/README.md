@@ -3,7 +3,7 @@
 
 > **Note:** for [pdfToolbox](https://hub.docker.com/r/callassoftware/pdftoolbox-cli), [pdfaPilot](https://hub.docker.com/r/callassoftware/pdfapilot-cli) and [pdfChip](https://hub.docker.com/r/callassoftware/pdfchip-cli) there are "ready-to-use" [Docker images](https://hub.docker.com/u/callassoftware) on Docker hub. 
 
-But there is no such aequivalent for the *PDFEngine SDK* on Docker Hub. This is because it is not a standalone application, but a *Software Development Kit* intended for building custom applications.
+But there is no such aequivalent for the [callas PDFEngine SDK](https://help.callassoftware.com/m/pdftoolbox/c/233994) on Docker Hub. This is because it is not a standalone application, but a *Software Development Kit* intended for building custom applications.
 
 This repository contains an example [Dockerfile-debian](Dockerfile-debian) that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
 
@@ -24,6 +24,7 @@ mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 
 ## Build the Docker Image
 
+[Dockerfile-debian](Dockerfile-debian) can be used to a new docker image tagged with callassoftware/pdfengine:v16-1-662 
 ```bash
 docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 ```
