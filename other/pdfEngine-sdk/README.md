@@ -41,7 +41,6 @@ You can now run the image to test an example operation, such as text extraction 
 docker run --rm -ti callassoftware/pdfengine:v16-1-662  \
                       ./pdfToolboxSample <your oem license code>  --extracttext sample.pdf sample.txt
 ```
-
 This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
 
 ---
@@ -53,7 +52,6 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 Inside Docker containers you must either use an [OEM license](https://oem.callassoftware.com/contact) or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
 
 below you will find some instructions howto modify the sample programs to use a callas license server (see [apply patches](#apply-patches))
- 
 
 throughout these samples there are two 'special' url schemes used in the first and optionally the second sample parameters:
 
@@ -74,7 +72,6 @@ note: before using these examples you first need to [apply the patches](#apply-p
 
 These examples will use the `sample.pdf` included in the Docker image and extract text from it to `sample.txt`.
 ```bash
-
 # ... with a single license server ...
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 --extracttext sample.pdf sample.txt
 
@@ -83,7 +80,6 @@ docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss:/
 
 # ... with an optional lsm argument (aka an --lsmessage aequivalent) ...
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 lsm://91cba468-7192-41e0-ad70-8510c0a5b1 --extracttext sample.pdf sample.txt
-
 ```
 
 ### apply patches ...
@@ -93,7 +89,6 @@ note: in the future (with versions newer then v16-1-662) these patches will be n
 cd callas_pdfEngineSDK_16-1-662
 patch -p1 < pdfEngine-include.patch
 patch -p1 < pdfEngine-samples.patch
- 
 ```
 
 ### rebuild the Sample-C application to use a callas license server
@@ -127,21 +122,18 @@ pdfEngine-SDK has been compiled using gcc-9.5. If you are encounter the followin
 ```
 
 then you are compiling the sample application with an older compiler.  As a workaround you may need to create a symbolic link to fix it:
-
 ```bash
 cd lib
 ln -s libstdc++.so.6 libstdc++.so
 ```
 
 ### rebuild the sample-DotNetCore application to use a callas license server
-
 ```bash
 cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-DotNetCore
 gmake
 ```
 
 ### rebuild the sample-java application to use a callas license server
-
 ```bash
 cd callas_pdfEngineSDK_x64_Linux_16-1-662/sample-java
 buildme.sh
