@@ -5,7 +5,7 @@
 
 But there is no such aequivalent for the [callas PDFEngine SDK](https://help.callassoftware.com/m/pdftoolbox/c/233994) on Docker Hub. This is because it is not a standalone application, but a *Software Development Kit* intended for building custom applications.
 
-This repository contains an example [Dockerfile-debian](Dockerfile-debian) that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
+This repository demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
 
 While the example mainly focuses on `sample-C/pdfToolbox` as a show case, the same approach can be adapted for *any* application built with the Callas PDFEngine SDK.
 
