@@ -25,11 +25,12 @@ mv callas_pdfEngineSDK_x64_Linux_16-1-662 callas_pdfEngineSDK_16-1-662
 ## Build the Docker Image
 
 The provided [Dockerfile-debian](Dockerfile-debian) can be used to create a new docker image tagged with *callassoftware/pdfengine:v16-1-662*.
-The new image uses /opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix as the default working directory to make it easier to call the sample-C application using a relative "./" directory
 
 ```bash
 docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 ```
+note: the new image uses `/opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix` as the default working directory to make it easier to call the sample-C application using a relative `./pdfToolboxSample` path
+
 ---
 
 ## Run the Docker Container
@@ -49,9 +50,9 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ### License Server Integration
 
-Inside Docker containers you must either use an OEM license or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
+Inside Docker containers you must either use an *OEM license* or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
 
-below you will find some instructions howto modify the sample programs to use a callas license server (see "apply patches")
+below you will find some instructions howto modify the sample programs to use a callas license server (see [apply patches](#apply-patches))
  
 
 throughout these samples there are two 'special' url schemes used in the first and optionally the second sample parameters:
