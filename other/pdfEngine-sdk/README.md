@@ -30,7 +30,7 @@ The provided [Dockerfile-debian](Dockerfile-debian) can be used to create a new 
 ```bash
 docker build -t callassoftware/pdfengine:v16-1-662 -f Dockerfile-debian .
 ```
-note: the new image sets a the default working directory to make it easier to call the sample-C application using a relative `./pdfToolboxSample` path
+note: the new image sets a the [default working directory](https://github.com/callassoftware/docker-snippets/blob/v16-1-662/other/pdfEngine-sdk/Dockerfile-debian#L39) to make it easier to call the sample-C application using a relative `./pdfToolboxSample` path
 
 ---
 
