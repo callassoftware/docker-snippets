@@ -103,8 +103,9 @@ make
 > **Troubleshooting 1:**
 
 symptom: compiling the sample application succeeds but at runtime there is an error like this
-
-`pdfToolboxSample.bin: lib/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by pdfToolboxSample.bin)`
+```
+pdfToolboxSample.bin: lib/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by pdfToolboxSample.bin)
+```
 
 cause: pdfEngine-SDK has been compiled using gcc-9.5, but you are compiling the sample application with a newer compiler.
 
@@ -117,9 +118,9 @@ rm lib/libstdc++.so.6
 > **Troubleshooting 2:**
 
 symptom: there is a linker error like this
-
-`/usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26`
-
+```
+/usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26
+```
 cause: pdfEngine-SDK has been compiled using gcc-9.5, but you are compiling the sample application with an older compiler
 
 solution: create a symbolic link to fix it:
