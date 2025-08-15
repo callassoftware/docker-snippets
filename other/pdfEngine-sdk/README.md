@@ -67,7 +67,7 @@ throughout these samples there are two 'special' url schemes used in the first a
 
 ### usage examples ...
 
-note: before using these examples you need to [apply the patches](#apply-patches), [rebuild the sample application](#rebuild-the-sample-c-application-to-use-a-callas-license-server) and also [rebuild the docker image](#build-the-docker-image)
+note: before using these examples you first need to [apply the patches](#apply-patches), then [rebuild the sample application](#rebuild-the-sample-c-application-to-use-a-callas-license-server) and also finally [rebuild the docker image](#build-the-docker-image)
 
 These examples will use the `sample.pdf` included in the Docker image and extract text from it to `sample.txt`.
 ```bash
