@@ -74,6 +74,8 @@ note: before using these examples you first need to [apply the patches](#apply-p
 
 These examples will use the `sample.pdf` included in the Docker image and extract text from it to `sample.txt`.
 ```bash
+
+# ... with a single license server ...
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 --extracttext sample.pdf sample.txt
 
 # ... with multiple license servers ...
@@ -83,7 +85,6 @@ docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss:/
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 lsm://91cba468-7192-41e0-ad70-8510c0a5b1 --extracttext sample.pdf sample.txt
 
 ```
-
 
 ### apply patches ...
 
