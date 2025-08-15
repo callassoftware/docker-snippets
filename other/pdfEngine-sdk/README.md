@@ -1,7 +1,7 @@
 
 # Docker Snippets for Callas PDFEngine SDK
 
-> **Note:** for [pdfToolbox](https://hub.docker.com/r/callassoftware/pdftoolbox-cli), [pdfaPilot](https://hub.docker.com/r/callassoftware/pdfapilot-cli) and [pdfChip](https://hub.docker.com/r/callassoftware/pdfchip-cli) there are "ready-to-use" [Docker images](https://hub.docker.com/u/callassoftware) on Docker hub. 
+> **Note:** for [pdfToolbox-cli](https://hub.docker.com/r/callassoftware/pdftoolbox-cli), [pdfaPilot-cli](https://hub.docker.com/r/callassoftware/pdfapilot-cli) and [pdfChip-cli](https://hub.docker.com/r/callassoftware/pdfchip-cli) there are "ready-to-use" [Docker images](https://hub.docker.com/u/callassoftware) on Docker hub. 
 
 But there is no such aequivalent for the [callas PDFEngine SDK](https://help.callassoftware.com/m/pdftoolbox/c/233994) on Docker Hub. This is because it is not a standalone application, but a *Software Development Kit* intended for building custom applications.
 
