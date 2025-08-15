@@ -3,9 +3,9 @@
 
 > **Note:** for `pdfToolbox`, `pdfaPilot`, or `pdfChip` there are "ready-to-use" [Docker images](https://hub.docker.com/u/callassoftware) on Docker hub. 
 
-But there is no such aequivalent for the *PDFEngine SDK* on Docker Hub. This is because it is not a standalone application, but a Software Development Kit intended for building custom applications.
+But there is no such aequivalent for the *PDFEngine SDK* on Docker Hub. This is because it is not a standalone application, but a *Software Development Kit* intended for building custom applications.
 
-This repository contains an example [Dockerfile](Dockerfile-debian) that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
+This repository contains an example [Dockerfile-debian](Dockerfile-debian) that demonstrates how to containerize a custom application using the Callas PDFEngine SDK.
 
 While this example focuses on *sample-C/pdfToolbox*, you can adapt the approach for any application built with the Callas PDFEngine SDK.
 
@@ -65,13 +65,15 @@ throughout these samples there are two 'special' url schemes used in the first a
 	example: 'lsm://fa043a4a-9152-b8f9-03f05a961da0'
 
 
-usage examples ...
+### usage examples ...
 
-This will use the `sample.pdf` included in the Docker image and extract its text to `sample.txt`.
+note: before using these examples you need to [apply the patches](#apply-patches) and [rebuild the docker image](#build-the-docker-image)
+
+These examples will use the `sample.pdf` included in the Docker image and extract text from it to `sample.txt`.
 ```bash
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample lss://10.0.0.64 --extracttext sample.pdf sample.txt
 
-# ... with a list of license servers ...
+# ... with multiple license servers ...
 docker run --rm -ti callassoftware/pdfengine:v16-1-662 ./pdfToolboxSample 'lss://10.0.0.64;10.0.0.73' --extracttext sample.pdf sample.txt
 
 # ... with an optional lsm argument (aka an --lsmessage aequivalent) ...
