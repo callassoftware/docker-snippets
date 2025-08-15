@@ -50,7 +50,7 @@ This will use the `sample.pdf` included in the Docker image and extract its text
 
 ### License Server Integration
 
-Inside Docker containers you must either use an *OEM license* or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
+Inside Docker containers you must either use an [OEM license](https://oem.callassoftware.com/contact) or a [Callas License Server](https://help.callassoftware.com/m/licenseserver/l/1601616-using-the-license-server)
 
 below you will find some instructions howto modify the sample programs to use a callas license server (see [apply patches](#apply-patches))
  
