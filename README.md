@@ -12,7 +12,7 @@ docker pull callassoftware/pdftoolbox-cli
 ```
 run preflight using the sample.kfpx/sample.pdf contained in the image
 ```
-docker run --rm -ti callassoftware/pdftoolbox-cli ./pdfToolbox sample.kfpx sample.pdf --licenseserver=<ip of a callas license server>
+docker run --rm -ti callassoftware/pdftoolbox-cli ./pdfToolbox sample.kfpx sample.pdf -o=/tmp/output.pdf --licenseserver=<ip of a callas license server>
 ```
 
 ## howto create your own docker images
