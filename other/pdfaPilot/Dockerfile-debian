@@ -1,33 +1,43 @@
-FROM debian:12-slim
+FROM debian:13-slim
 
-RUN apt-get update -y && apt-get upgrade -y \
-        && apt-get install -y  \
-                apt-utils  \
-                procps \
-                net-tools \
-                fontconfig  \
-                fonts-dejavu \
-                libatomic1 
+LABEL maintainer="support@callassoftware.com"
+LABEL description="callas pdfaPilot CLI"
+
+
+RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
+
+RUN --mount=type=cache,target=/var/cache/apt \
+        apt-get update -y \
+        && apt-get upgrade -y \
+        && apt-get install -y apt-utils procps net-tools fontconfig fonts-dejavu libatomic1 tini
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN sed -i 's,main,main contrib non-free non-free-firmware,' /etc/apt/sources.list.d/debian.sources
-# RUN apt-get install -y ttf-mscorefonts-installer
+# RUN --mount=type=cache,target=/var/cache/apt apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
-# RUN apt-get install -y --no-install-recommends libreoffice-nogui liblibreoffice-java default-jre-headless
+# RUN --mount=type=cache,target=/var/cache/apt apt-get install -y --no-install-recommends libreoffice-nogui liblibreoffice-java default-jre-headless
 
-# note: please follow the instructions from README.md to prepare the callas_pdfaPilotCLI_Linux_14-1-396 directory ...
-COPY callas_pdfaPilotCLI_Linux_14-1-396 /opt/callas/callas_pdfaPilotCLI_Linux_14-1-396
+COPY callas_pdfaPilotCLI_Linux_14-2-400 /opt/callas/callas_pdfaPilotCLI_Linux_14-2-400
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-1-396 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-1-396 cli
+RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-2-400 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-2-400 cli
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-1-396
+RUN useradd -m callas # note: do *not* 'chown -R callas:callas /opt/callas' as this introduces a huge new image layer
+USER callas
 
+WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-2-400
+
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies default parameters that cannot be overridden. it can be used for initial setup (e.g. install fonts)
+#   CMD specifies default parameters that can be overridden. Here `tini` does all this PID1 signal handling stuff for us
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+CMD ["/bin/bash"]
