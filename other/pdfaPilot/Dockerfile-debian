@@ -1,9 +1,5 @@
 FROM debian:13-slim
 
-LABEL maintainer="support@callassoftware.com"
-LABEL description="callas pdfaPilot CLI"
-
-
 RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
 RUN --mount=type=cache,target=/var/cache/apt \
