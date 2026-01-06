@@ -1,7 +1,9 @@
-FROM amazonlinux:2023.7.20250623.1
+FROM amazonlinux:2023.9.20251208.0
+
+ARG TOOLBOX_VERSION=16-2-671
 
 RUN dnf update -y  \
-    && dnf install -y fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+    && dnf install -y shadow-utils fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
     && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
@@ -22,13 +24,27 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 #     && cd /usr/bin && ln -s /opt/libreoffice25.2/program/soffice \
 #     && cd /usr/lib64 && test -f libssl3.so || ln -s libssl.so.3 libssl3.so 
 
-COPY callas_pdfToolboxCLI_Linux_16-1-662 /opt/callas/callas_pdfToolboxCLI_Linux_16-1-662
+COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-1-662 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-1-662 cli
+RUN mkdir -p /opt/callas && cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} cli
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-1-662
+# install `tini` - as needed by the ENTRYPOINT
+ARG TARGETARCH
+ENV TINI_VERSION=v0.19.0
+RUN curl -L -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TARGETARCH} && chmod +x /usr/local/bin/tini
 
+RUN useradd -m callas
+USER callas
+
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
+
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies default parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
+CMD ["/bin/bash"]

@@ -1,4 +1,7 @@
 FROM opensuse/leap:15.6
+# FROM opensuse/leap:16.0  # known issue: html2pdf conversion is not working with opensuse/leap:16.0
+
+ARG TOOLBOX_VERSION=16-2-671
 
 RUN zypper update -y && \
     zypper install -y fontconfig glibc-locale dejavu-fonts procps which psutils libatomic1
@@ -13,15 +16,28 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
 # RUN zypper install -y libreoffice-officebean libreoffice-writer libreoffice-writer-extensions libreoffice-calc libreoffice-calc-extensions libreoffice-impress libreoffice-draw
 
-COPY callas_pdfToolboxCLI_Linux_16-1-662 /opt/callas/callas_pdfToolboxCLI_Linux_16-1-662
-# remove some incompatible libs (libstdc++.so.6)
-RUN find /opt/callas/callas_pdfToolboxCLI_Linux_16-1-662 -type l -name libstdc++.so.6 -exec rm {} +
+COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_16-1-662 pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_16-1-662 cli
+RUN mkdir -p /opt/callas && cd /opt/callas && ln -s callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} pdftoolbox-cli && ln -s callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} cli
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_16-1-662
+# install `tini` - as needed by the ENTRYPOINT
+ARG TARGETARCH
+ENV TINI_VERSION=v0.19.0
+RUN curl -L -o /usr/local/bin/tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TARGETARCH} && chmod +x /usr/local/bin/tini
+
+RUN useradd -m callas
+USER callas
+
+WORKDIR /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
+
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies default parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
+CMD ["/bin/bash"]
 
