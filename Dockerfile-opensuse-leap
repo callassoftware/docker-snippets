@@ -1,10 +1,9 @@
-FROM opensuse/leap:15.6
-# FROM opensuse/leap:16.0  # known issue: html2pdf conversion is not working with opensuse/leap:16.0
+FROM opensuse/leap:16.0
 
 ARG TOOLBOX_VERSION=16-2-671
 
 RUN zypper update -y && \
-    zypper install -y fontconfig glibc-locale dejavu-fonts procps which psutils libatomic1
+    zypper install -y fontconfig glibc-locale dejavu-fonts procps which psutils libatomic1 glibc-gconv-modules-extra
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
