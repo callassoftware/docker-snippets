@@ -1,5 +1,7 @@
 FROM debian:13-slim
 
+ARG PDFAPILOT_VERSION=14-2-400
+
 RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -17,10 +19,10 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
 # RUN --mount=type=cache,target=/var/cache/apt apt-get install -y --no-install-recommends libreoffice-nogui liblibreoffice-java default-jre-headless
 
-COPY callas_pdfaPilotCLI_Linux_14-2-400 /opt/callas/callas_pdfaPilotCLI_Linux_14-2-400
+COPY callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION} /opt/callas/callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION}
 
 # add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_14-2-400 pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_14-2-400 cli
+RUN cd /opt/callas && ln -s callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION} pdfapilot-cli && ln -s callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION} cli
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -28,12 +30,11 @@ ENV LC_ALL=C.UTF-8
 RUN useradd -m callas # note: do *not* 'chown -R callas:callas /opt/callas' as this introduces a huge new image layer
 USER callas
 
-WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_14-2-400
+WORKDIR /opt/callas/callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION}
 
 # long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
 # short ...
-#   ENTRYPOINT specifies default parameters that cannot be overridden. it can be used for initial setup (e.g. install fonts)
-#   CMD specifies default parameters that can be overridden. Here `tini` does all this PID1 signal handling stuff for us
+#   ENTRYPOINT specifies default parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
 ENTRYPOINT ["/usr/bin/tini", "--"]
-
 CMD ["/bin/bash"]
