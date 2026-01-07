@@ -1,16 +1,14 @@
+FROM debian:13-slim
 
-FROM debian:12-slim
+LABEL maintainer="support@callassoftware.com"
+LABEL description="callas pdfChip CLI"
 
-# note: please follow the instructions from README.md to prepare the callas_pdfChip_2-6-098 directory ...
-COPY callas_pdfChip_2-6-098 /opt/callas/callas_pdfChip_2-6-098
+ARG PDFCHIP_VERSION=2-6-098
 
-# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
-COPY lsb_release_mockup.sh /usr/bin
-RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
-# add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfChip_2-6-098 pdfchip-cli && ln -s callas_pdfChip_2-6-098 cli
-RUN apt-get update -y && apt-get upgrade -y \
+RUN --mount=type=cache,target=/var/cache/apt \
+        apt-get update -y && apt-get upgrade -y \
         && apt-get install -y  \
                 apt-utils  \
                 locales \
@@ -19,15 +17,32 @@ RUN apt-get update -y && apt-get upgrade -y \
                 fontconfig  \
                 fonts-dejavu \
                 libatomic1 \
+                tini \
         && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=C.UTF-8 && apt-get purge -y locales && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
           
+# optional - install microsoft truetype fonts ...
+# RUN --mount=type=cache,target=/var/cache/apt apt-get install -y ttf-mscorefonts-installer
+
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
+COPY callas_pdfChip_${PDFCHIP_VERSION} /opt/callas/callas_pdfChip_${PDFCHIP_VERSION}
+# add some "convenience" symlinks ...
+RUN cd /opt/callas && ln -s callas_pdfChip_${PDFCHIP_VERSION} pdfchip-cli && ln -s callas_pdfChip_${PDFCHIP_VERSION} cli
 
-# optional - install microsoft truetype fonts ...
-# RUN sed -i 's,main,main contrib non-free non-free-firmware,' /etc/apt/sources.list.d/debian.sources
-# RUN apt-get install -y ttf-mscorefonts-installer
+RUN useradd -m callas
+USER callas
 
-WORKDIR /opt/callas/callas_pdfChip_2-6-098
+WORKDIR /opt/callas/callas_pdfChip_${PDFCHIP_VERSION}
+
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/bin/bash"]
 
