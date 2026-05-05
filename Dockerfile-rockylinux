@@ -1,6 +1,6 @@
 FROM rockylinux/rockylinux:10-minimal
 
-ARG TOOLBOX_VERSION=16-2-671
+ARG TOOLBOX_VERSION=17-0-682
 
 RUN microdnf update -y && \
     microdnf install -y dnf procps tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
@@ -15,11 +15,14 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 #    && dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
-# RUN dnf install -y libXinerama cairo cups-libs libSM java
-# RUN cd /root && curl -LO https://download.documentfoundation.org/libreoffice/stable/25.2.4/rpm/x86_64/LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
-#      && tar xvpf LibreOffice_25.2.4_Linux_x86-64_rpm.tar.gz \
-#      && cd LibreOffice_25.2.4.3_Linux_x86-64_rpm/RPMS \
-#      && rpm -Uvh *.rpm && cd /usr/bin && ln -s /opt/libreoffice25.2/program/soffice
+# RUN dnf install -y libXinerama cairo cups-libs libSM nss libX11-xcb && \
+#     cd /tmp && curl --output LibreOffice.tar.gz -L https://download.documentfoundation.org/libreoffice/stable/26.2.3/rpm/x86_64/LibreOffice_26.2.3_Linux_x86-64_rpm.tar.gz \
+#     && tar xvpf LibreOffice.tar.gz --strip 1 \
+#     && cd RPMS \
+#     && rm -f *beanshell-script* *javascript-script* *gnome-integration* *kde-integration* *freedesktop-menus* \
+#     && rpm -Uvh *.rpm \
+#     && cd /usr/bin && ln -s /opt/libreoffice26.2/program/soffice
+
 
 COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 

@@ -1,6 +1,6 @@
 FROM opensuse/leap:16.0
 
-ARG TOOLBOX_VERSION=16-2-671
+ARG TOOLBOX_VERSION=17-0-682
 
 RUN zypper update -y && \
     zypper install -y fontconfig glibc-locale dejavu-fonts procps which psutils libatomic1 glibc-gconv-modules-extra
@@ -9,11 +9,11 @@ RUN zypper update -y && \
 COPY lsb_release_mockup.sh /usr/bin
 RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
-# optional - install microsoft truetype fonts ...
-# RUN zypper install -y fetchmsttfonts
+# optional: install some microsoft ttf metric‑compatible families
+# zypper install liberation-fonts google-opensans-fonts
 
-# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
-# RUN zypper install -y libreoffice-officebean libreoffice-writer libreoffice-writer-extensions libreoffice-calc libreoffice-calc-extensions libreoffice-impress libreoffice-draw
+# optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 1000MB to the image ...
+# RUN zypper install -y libreoffice-officebean libreoffice-writer libreoffice-writer-extensions libreoffice-calc libreoffice-calc-extensions libreoffice-impress libreoffice-draw libreoffice-pyuno
 
 COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 

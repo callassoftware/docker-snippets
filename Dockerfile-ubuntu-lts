@@ -1,6 +1,6 @@
 FROM ubuntu:noble-20251013
 
-ARG TOOLBOX_VERSION=16-2-671
+ARG TOOLBOX_VERSION=17-0-682
 
 RUN apt-get update -y \
     && apt-get upgrade -y \
@@ -22,7 +22,7 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 # RUN apt update -y && apt install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 800MB to the image ...
-# RUN apt install -y --install-recommends libreoffice libreoffice-java-common
+# RUN apt install -y --no-install-recommends libreoffice-nogui libreoffice-script-provider-python
 
 COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 
