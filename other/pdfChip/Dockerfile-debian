@@ -3,7 +3,7 @@ FROM debian:13-slim
 LABEL maintainer="support@callassoftware.com"
 LABEL description="callas pdfChip CLI"
 
-ARG PDFCHIP_VERSION=2-6-098
+ARG PDFCHIP_VERSION=2-7-101
 
 RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
