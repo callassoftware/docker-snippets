@@ -1,15 +1,12 @@
-FROM debian:12-slim
+FROM debian:13-slim
 
-# note: see README.md regarding howto get and prepare (aka modify) callas_pdfEngineSDK_16-1-662 for usage within a container environment
+ARG PDFENGINE_VERSION=17-0-683
 
-COPY callas_pdfEngineSDK_16-1-662 /opt/callas/callas_pdfEngineSDK_16-1-662
+RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
-# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
-COPY lsb_release_mockup.sh /usr/bin
-RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
-# add some "convenience" symlinks ...
-RUN cd /opt/callas && ln -s callas_pdfEngineSDK_16-1-662 callas-sdk && ln -s callas_pdfEngineSDK_16-1-662 sdk 
 RUN apt-get update -y && apt-get upgrade -y \
         && apt-get install -y  \
                 apt-utils  \
@@ -19,21 +16,37 @@ RUN apt-get update -y && apt-get upgrade -y \
                 fontconfig  \
                 fonts-dejavu \
                 libatomic1 \
-        && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale LANG=C.UTF-8 && apt-get purge -y locales && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+                tini \
+        && echo "C.UTF-8 UTF-8" > /etc/locale.gen && locale-gen && update-locale
+
+# avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
+COPY lsb_release_mockup.sh /usr/bin
+RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/bin/lsb_release
 
 # optional - install microsoft truetype fonts ...
-# RUN sed -i 's,main,main contrib non-free non-free-firmware,' /etc/apt/sources.list.d/debian.sources
 # RUN apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
-# RUN apt-get install --no-install-recommends libreoffice liblibreoffice-java default-jre-headless
-          
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+# RUN apt-get install -y --no-install-recommends libreoffice-nogui libreoffice-script-provider-python
 
+COPY callas_pdfEngineSDK_${PDFENGINE_VERSION} /opt/callas/callas_pdfEngineSDK_${PDFENGINE_VERSION}
+# add some "convenience" symlinks ...
+RUN cd /opt/callas && ln -s callas_pdfEngineSDK_${PDFENGINE_VERSION} callas-sdk && ln -s callas_pdfEngineSDK_${PDFENGINE_VERSION} sdk
 
-# optional - install microsoft truetype fonts ...
-# RUN apt-get install -y ttf-mscorefonts-installer
+WORKDIR /opt/callas/callas_pdfEngineSDK_${PDFENGINE_VERSION}/sample-C/unix
 
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies default parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
 
-WORKDIR /opt/callas/callas_pdfEngineSDK_16-1-662/sample-C/unix
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/bin/bash"]
+
+# long: https://www.bmc.com/blogs/docker-cmd-vs-entrypoint/
+# short ...
+#   ENTRYPOINT specifies default parameters that cannot be overridden. It can be used for initial setup. Here `tini` does all this complicated PID1 signal handling stuff for us
+#   CMD specifies default parameters that can be overridden. By using ENTRYPOINT *and* CMD together we get the best from both worlds
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/bin/bash"]
