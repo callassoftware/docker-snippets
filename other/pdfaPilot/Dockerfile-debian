@@ -1,6 +1,6 @@
 FROM debian:13-slim
 
-ARG PDFAPILOT_VERSION=14-2-400
+ARG PDFAPILOT_VERSION=17-0-683
 
 RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 
@@ -17,7 +17,7 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 # RUN --mount=type=cache,target=/var/cache/apt apt-get install -y ttf-mscorefonts-installer
 
 # optional - install libreoffice (only needed to convert office documents to pdf). Note: this adds nearly 700MB to the image ...
-# RUN --mount=type=cache,target=/var/cache/apt apt-get install -y --no-install-recommends libreoffice-nogui liblibreoffice-java default-jre-headless
+# RUN --mount=type=cache,target=/var/cache/apt apt-get install -y --no-install-recommends libreoffice-nogui libreoffice-script-provider-python
 
 COPY callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION} /opt/callas/callas_pdfaPilotCLI_Linux_${PDFAPILOT_VERSION}
 

@@ -11,14 +11,14 @@ docker run --rm -ti callassoftware/pdfapilot-cli ./pdfaPilot --analyze sample.pd
 
 ### download and unpack the pdfaPilot tar.gz installer 
 ```
-# note: for Linux ARM use https://www.callassoftware.com/extranet/callas_pdfaPilotCLIandServer/callas_pdfaPilotCLI_arm64_Linux_14-2-400.tar.gz
-curl -LO https://www.callassoftware.com/extranet/callas_pdfaPilotCLIandServer/callas_pdfaPilotCLI_x64_Linux_14-2-400.tar.gz
-tar zxvpf callas_pdfaPilotCLI_x64_Linux_14-2-400.tar.gz
-mv callas_pdfaPilotCLI_x64_Linux_14-2-400 callas_pdfaPilotCLI_Linux_14-2-400
-cp sample.pdf callas_pdfaPilotCLI_Linux_14-2-400
+# note: for Linux ARM use https://www.callassoftware.com/extranet/callas_pdfaPilotCLIandServer/callas_pdfaPilotCLI_arm64_Linux_17-0-683.tar.gz
+curl -LO https://www.callassoftware.com/extranet/callas_pdfaPilotCLIandServer/callas_pdfaPilotCLI_x64_Linux_17-0-683.tar.gz
+tar zxvpf callas_pdfaPilotCLI_x64_Linux_17-0-683.tar.gz
+mv callas_pdfaPilotCLI_x64_Linux_17-0-683 callas_pdfaPilotCLI_Linux_17-0-683
+cp sample.pdf callas_pdfaPilotCLI_Linux_17-0-683
 ```
 
 ### build the docker image
 ```
-docker build -t callassoftware/pdfapilot-cli:v14-2-400 -f Dockerfile-debian .
+docker build -t callassoftware/pdfapilot-cli:v17-0-683 -f Dockerfile-debian .
 ```
