@@ -77,7 +77,7 @@ docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample <your 
 ```
 
 ## Troubleshooting
-> ** symptom: building the sample application succeeds but at runtime there is an error like this **
+> **symptom: building the sample application succeeds but at runtime there is an error like this**
 ```
 pdfToolboxSample.bin: lib/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by pdfToolboxSample.bin)
 ```
@@ -90,7 +90,7 @@ solution: remove the shipped lib/libstdc++.so.6 to fix it:
 rm lib/libstdc++.so.6
 ```
 
-> ** symptom: building the sample application fails because there is a linker error like this **
+> **symptom: building the sample application fails because there is a linker error like this**
 ```
 /usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26
 ```
