@@ -71,11 +71,10 @@ docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample 'lss:/
 
 # ... with an optional lsm argument (aka an --lsmessage aequivalent) ...
 docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample lss://10.0.0.64 lsm://91cba468-7192-41e0-ad70-8510c0a5b1 --extracttext sample.pdf sample.txt
-```
+
 # ... with an OEM Licensecode ...
 docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample <your OEM license code> --extracttext sample.pdf sample.txt
 ```
-
 
 > **Troubleshooting 1:**
 
