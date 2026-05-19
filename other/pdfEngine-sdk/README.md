@@ -59,7 +59,7 @@ throughout these samples there are two 'special' url schemes used in the first a
 	example: `lsm://fa043a4a-9152-b8f9-03f05a961da0`
 
 
-### usage examples ...
+## Usage examples ...
 
 These examples will use the `sample.pdf` included in the Docker image and extract text from it to `sample.txt`.
 ```bash
@@ -76,9 +76,8 @@ docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample lss://
 docker run --rm -ti callassoftware/pdfengine:v17-0-683 ./pdfToolboxSample <your OEM license code> --extracttext sample.pdf sample.txt
 ```
 
-> **Troubleshooting 1:**
-
-symptom: building the sample application succeeds but at runtime there is an error like this
+## Troubleshooting
+> ** symptom: building the sample application succeeds but at runtime there is an error like this **
 ```
 pdfToolboxSample.bin: lib/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by pdfToolboxSample.bin)
 ```
@@ -91,9 +90,7 @@ solution: remove the shipped lib/libstdc++.so.6 to fix it:
 rm lib/libstdc++.so.6
 ```
 
-> **Troubleshooting 2:**
-
-symptom: building the sample application fails because there is a linker error like this
+> ** symptom: building the sample application fails because there is a linker error like this **
 ```
 /usr/bin/ld: lib/libpdfEngine.so: undefined reference to `std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@GLIBCXX_3.4.26
 ```
