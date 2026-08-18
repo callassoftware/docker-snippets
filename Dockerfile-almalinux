@@ -2,8 +2,9 @@ FROM almalinux:10-minimal
 
 ARG TOOLBOX_VERSION=17-0-682
 
+# note: use 'dnf' instead of 'microdnf' when it is not available (as on non-minimal base images)
 RUN microdnf update -y \
-    && microdnf install -y dnf procps tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
+    && microdnf install -y dnf fontconfig libatomic procps tar epel-release which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts \
     && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
