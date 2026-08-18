@@ -1,6 +1,6 @@
 # docker-snippets
 
-Docker build recipes, examples, and operational notes for callas products—primarily **pdfToolbox CLI**.
+Docker build recipes, examples, and operational notes for callas products - primarily **pdfToolbox CLI**.
 
 > Docker snippets for other callas products, including pdfaPilot and pdfChip, are available in the [`other/`](./other/) directory.
 
