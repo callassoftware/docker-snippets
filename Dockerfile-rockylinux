@@ -2,9 +2,10 @@ FROM rockylinux/rockylinux:10-minimal
 
 ARG TOOLBOX_VERSION=17-0-682
 
-RUN microdnf update -y && \
-    microdnf install -y dnf procps tar epel-release fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
-        && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
+# note: use 'dnf' instead of 'microdnf' when it is not available (as on non-minimal base images)
+RUN microdnf update -y \
+    && microdnf install -y dnf fontconfig libatomic procps tar which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts epel-release \
+    && cd /usr/lib64 && { test -f libbz2.so.1.0 || ln -s libbz2.so.1 libbz2.so.1.0; }
 
 # avoid installing the full /usr/bin/lsb_release package, which can be several megabytes in size. Use a lightweight mock implementation instead.
 COPY lsb_release_mockup.sh /usr/bin
@@ -22,7 +23,6 @@ RUN test -x /usr/bin/lsb_release || ln -s /usr/bin/lsb_release_mockup.sh  /usr/b
 #     && rm -f *beanshell-script* *javascript-script* *gnome-integration* *kde-integration* *freedesktop-menus* \
 #     && rpm -Uvh *.rpm \
 #     && cd /usr/bin && ln -s /opt/libreoffice26.2/program/soffice
-
 
 COPY callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION} /opt/callas/callas_pdfToolboxCLI_Linux_${TOOLBOX_VERSION}
 
