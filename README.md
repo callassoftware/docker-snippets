@@ -6,11 +6,11 @@ Docker build recipes, examples, and operational notes for callas products - prim
 
 ## Contents
 
-- [Use the published image](#use-the-published-image)
+- [Use the prebuild image](#use-the-prebuild-image)
 - [Build a custom image](#build-a-custom-image)
 - [Verify the image](#verify-the-image)
 
-## Use the published image
+## Use the prebuild image
 
 Ready-to-use `pdfToolbox CLI` images are published on [Docker Hub](https://hub.docker.com/repository/docker/callassoftware/pdftoolbox-cli).
 
