@@ -27,14 +27,22 @@ The image includes `sample.kfpx` and `sample.pdf`. The following command runs th
 ```bash
 docker run --rm -it \
   callassoftware/pdftoolbox-cli \
-  ./pdfToolbox sample.kfpx sample.pdf \
+  /opt/callas/pdftoolbox-cli/pdfToolbox sample.kfpx sample.pdf \
   -o=/tmp/output.pdf \
   --licenseserver=<CALLAS_LICENSE_SERVER_IP>
 ```
 
 Replace `<CALLAS_LICENSE_SERVER_IP>` with the address of your callas license server.
 
-> The container is removed automatically when the command finishes because of `--rm`. Mount a host directory with `-v` if you need to retain generated files outside the container.
+> as usual with docker containers - you can retain generated files outside the container by using a volume for persistence
+```bash
+docker run --rm -it --volume $(pwd):$(pwd) \
+  callassoftware/pdftoolbox-cli \
+  /opt/callas/pdftoolbox-cli/pdfToolbox sample.kfpx sample.pdf \
+  -o=$(pwd)/output.pdf \
+  --licenseserver=<CALLAS_LICENSE_SERVER_IP>
+```
+
 
 ## Build a custom image
 
