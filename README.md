@@ -71,13 +71,6 @@ tar zxvpf callas_pdfToolboxCLI_x64_Linux_17-1-692.tar.gz
 mv callas_pdfToolboxCLI_x64_Linux_17-1-692 callas_pdfToolboxCLI_Linux_17-1-692
 ```
 
-For newer Debian-based distributions, such as Debian Trixie, the bundled `libstdc++.so.6` is not required and can be removed before building:
-
-```bash
-rm callas_pdfToolboxCLI_Linux_17-1-692/lib/libstdc++.so.6
-```
-
-Keep the bundled library when targeting older Debian-based distributions.
 
 ### Optionally reduce the image size
 
