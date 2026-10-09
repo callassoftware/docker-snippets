@@ -1,7 +1,6 @@
-# FROM redhat/ubi9:9.6
-FROM redhat/ubi9
+FROM redhat/ubi10
 
-ARG TOOLBOX_VERSION=17-0-682
+ARG TOOLBOX_VERSION=17-1-692
 
 RUN dnf update -y && \
     dnf install -y procps fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \

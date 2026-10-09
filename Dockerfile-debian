@@ -1,6 +1,6 @@
 FROM debian:13-slim
 
-ARG TOOLBOX_VERSION=17-0-682
+ARG TOOLBOX_VERSION=17-1-692
 
 RUN grep -q non-free /etc/apt/sources.list.d/debian.sources || sed -i 's,main,main contrib non-free,' /etc/apt/sources.list.d/debian.sources
 

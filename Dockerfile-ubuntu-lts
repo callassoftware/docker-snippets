@@ -1,6 +1,6 @@
-FROM ubuntu:noble-20251013
+FROM ubuntu:stonking-20260913.1
 
-ARG TOOLBOX_VERSION=17-0-682
+ARG TOOLBOX_VERSION=17-1-692
 
 RUN apt-get update -y \
     && apt-get upgrade -y \

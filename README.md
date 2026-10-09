@@ -65,16 +65,16 @@ Clone this repository and download the desired pdfToolbox CLI .tar.gz archive. U
 git clone https://github.com/callassoftware/docker-snippets.git
 cd docker-snippets
 
-wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_17-0-682.tar.gz
+wget https://www.callassoftware.com/extranet/callas_pdfToolboxCLIandServer/callas_pdfToolboxCLI_x64_Linux_17-1-692.tar.gz
 
-tar zxvpf callas_pdfToolboxCLI_x64_Linux_17-0-682.tar.gz
-mv callas_pdfToolboxCLI_x64_Linux_17-0-682 callas_pdfToolboxCLI_Linux_17-0-682
+tar zxvpf callas_pdfToolboxCLI_x64_Linux_17-1-692.tar.gz
+mv callas_pdfToolboxCLI_x64_Linux_17-1-692 callas_pdfToolboxCLI_Linux_17-1-692
 ```
 
 For newer Debian-based distributions, such as Debian Trixie, the bundled `libstdc++.so.6` is not required and can be removed before building:
 
 ```bash
-rm callas_pdfToolboxCLI_Linux_17-0-682/lib/libstdc++.so.6
+rm callas_pdfToolboxCLI_Linux_17-1-692/lib/libstdc++.so.6
 ```
 
 Keep the bundled library when targeting older Debian-based distributions.
@@ -84,7 +84,7 @@ Keep the bundled library when targeting older Debian-based distributions.
 If your workflow does not require all pdfToolbox components, use `reduce-essential.sh` to remove unneeded components before building. This creates a smaller, purpose-built image.
 
 ```bash
-cd callas_pdfToolboxCLI_Linux_17-0-682
+cd callas_pdfToolboxCLI_Linux_17-1-692
 bash ../reduce-essential.sh
 cd ..
 ```
@@ -95,7 +95,7 @@ Build the Debian-based image and tag it with the pdfToolbox version:
 
 ```bash
 docker build \
-  -t callassoftware/pdftoolbox-cli:v17-0-682 \
+  -t callassoftware/pdftoolbox-cli:v17-1-692 \
   -f Dockerfile-debian \
   .
 ```
@@ -106,7 +106,7 @@ Confirm that the newly built image starts and reports the installed version:
 
 ```bash
 docker run --rm -it \
-  callassoftware/pdftoolbox-cli:v17-0-682 \
+  callassoftware/pdftoolbox-cli:v17-1-692 \
   ./pdfToolbox --version
 ```
 

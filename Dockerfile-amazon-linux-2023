@@ -1,6 +1,6 @@
-FROM amazonlinux:2023.11.20260413.0
+FROM amazonlinux:2023.12.20260930.0
 
-ARG TOOLBOX_VERSION=17-0-682
+ARG TOOLBOX_VERSION=17-1-692
 
 RUN dnf update -y  \
     && dnf install -y shadow-utils fontconfig which libfontenc glibc-gconv-extra dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-serif-fonts libatomic \
